@@ -32,8 +32,12 @@ const Navbar = () => {
       )}
     >
       <div className="container-custom flex justify-between items-center">
-        <a href="#" className="text-2xl font-bold text-taupe-900">
-          TRANSFORM
+        <a href="#" className="flex items-center">
+          <img 
+            src="/lovable-uploads/26bf3933-f082-41d8-9f43-d6fd9fc0c29d.png" 
+            alt="Minny Logo" 
+            className="h-10 md:h-12"
+          />
         </a>
 
         {/* Desktop Navigation */}
@@ -81,6 +85,13 @@ const Navbar = () => {
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >
+        <div className="flex justify-center mb-8">
+          <img 
+            src="/lovable-uploads/26bf3933-f082-41d8-9f43-d6fd9fc0c29d.png" 
+            alt="Minny Logo" 
+            className="h-10"
+          />
+        </div>
         <nav className="flex flex-col space-y-6 text-lg">
           <a 
             href="#features" 

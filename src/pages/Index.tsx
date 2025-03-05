@@ -9,6 +9,9 @@ import Footer from '@/components/sections/Footer';
 
 const Index = () => {
   useEffect(() => {
+    // Update document title
+    document.title = "Minny - Transformable Puffer Jacket";
+    
     // Smooth scroll behavior for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
