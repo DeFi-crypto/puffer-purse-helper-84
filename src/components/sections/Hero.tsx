@@ -45,13 +45,13 @@ const Hero = () => {
           
           <div className="order-1 lg:order-2 max-w-md mx-auto lg:max-w-none animate-fade-in" style={{ animationDelay: '0.6s' }}>
             <div className="relative">
-              {/* Product image placeholder */}
+              {/* Product image */}
               <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-stone-100 to-stone-200 shadow-lg">
-                <div className="w-full h-full bg-stone-200 flex items-center justify-center">
-                  <div className="w-3/4 h-3/4 bg-midnight-400 rounded-lg shadow-lg flex items-center justify-center text-white font-medium">
-                    Product Showcase
-                  </div>
-                </div>
+                <img 
+                  src="/lovable-uploads/d9d5597b-edb6-4a76-b148-90abf928a78d.png" 
+                  alt="Minny Transformable Jacket" 
+                  className="w-full h-full object-contain p-4"
+                />
               </div>
               
               {/* Accent elements */}

@@ -21,7 +21,7 @@ const ProductTransform = ({ className }: ProductTransformProps) => {
   return (
     <div className={cn("relative w-full max-w-lg mx-auto", className)}>
       <div className="relative aspect-square overflow-hidden rounded-xl bg-stone-100">
-        {/* Placeholder for product images - in a real implementation you'd swap images */}
+        {/* Product images */}
         <div 
           className={cn(
             "w-full h-full transition-opacity duration-500",
@@ -29,16 +29,21 @@ const ProductTransform = ({ className }: ProductTransformProps) => {
           )}
         >
           {productState === 'jacket' ? (
-            <div className="w-full h-full bg-stone-200 flex items-center justify-center">
-              <div className="w-3/4 h-3/4 bg-midnight-400 rounded-lg shadow-lg flex items-center justify-center text-white font-medium">
-                Puffer Jacket
-              </div>
+            <div className="w-full h-full flex items-center justify-center p-4">
+              <img 
+                src="/lovable-uploads/d9d5597b-edb6-4a76-b148-90abf928a78d.png" 
+                alt="Minny Puffer Jacket" 
+                className="w-full h-full object-contain"
+              />
             </div>
           ) : (
-            <div className="w-full h-full bg-stone-200 flex items-center justify-center">
-              <div className="w-1/2 h-2/3 bg-taupe-500 rounded-lg shadow-lg flex items-center justify-center text-white font-medium">
-                Leather Purse
-              </div>
+            <div className="w-full h-full flex items-center justify-center p-4">
+              <img 
+                src="/lovable-uploads/d9d5597b-edb6-4a76-b148-90abf928a78d.png" 
+                alt="Minny Leather Purse"
+                className="w-full h-full object-contain object-right"
+                style={{ objectPosition: "95% center" }}
+              />
             </div>
           )}
         </div>
