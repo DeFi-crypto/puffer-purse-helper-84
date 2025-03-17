@@ -3,6 +3,14 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 
 const Hero = () => {
+  const handlePreOrder = () => {
+    // Redirect to Stripe checkout
+    window.location.href = 'https://checkout.stripe.com/c/pay/cs_test_a1aBCdEfGHiJKlMNOpQRstUv';
+    
+    // Note: In production, you would replace the URL above with your real Stripe checkout session URL
+    // It's best to create this session dynamically on your server for each order
+  };
+
   return (
     <section className="min-h-screen pt-24 pb-12 flex items-center relative overflow-hidden">
       {/* Background Elements */}
@@ -21,10 +29,13 @@ const Hero = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
-              <a href="#" className="btn-primary flex items-center justify-center">
+              <button 
+                onClick={handlePreOrder}
+                className="btn-primary flex items-center justify-center"
+              >
                 Pre-Order Now
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </a>
+              </button>
               <a href="#features" className="btn-secondary flex items-center justify-center">
                 Learn More
               </a>

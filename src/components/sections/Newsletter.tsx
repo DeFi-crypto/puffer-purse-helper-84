@@ -1,8 +1,10 @@
 
 import React, { useState } from 'react';
-import { ArrowRight, Check } from 'lucide-react';
+import { Send } from 'lucide-react';
 import AnimatedSection from '../ui/AnimatedSection';
 import { toast } from 'sonner';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
 
 const Newsletter = () => {
   const [email, setEmail] = useState('');
@@ -41,32 +43,29 @@ const Newsletter = () => {
             {!isSubscribed ? (
               <form onSubmit={handleSubmit} className="max-w-md mx-auto">
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    required
-                    className="px-4 py-3 rounded-md flex-grow border border-stone-200 focus:outline-none focus:ring-2 focus:ring-taupe-500"
-                  />
-                  <button 
-                    type="submit" 
-                    className="btn-primary flex-shrink-0 flex items-center justify-center"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      <span>Subscribing...</span>
-                    ) : (
-                      <>
-                        Subscribe <ArrowRight className="ml-2 h-5 w-5" />
-                      </>
-                    )}
-                  </button>
+                  <div className="relative flex-grow">
+                    <Input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      required
+                      className="pr-14 h-12 border-stone-200 focus:border-taupe-500 transition-all duration-300"
+                    />
+                    <Button 
+                      type="submit" 
+                      size="icon"
+                      className="absolute right-1 top-1 bg-taupe-800 hover:bg-taupe-700 h-10 w-10 rounded-md flex items-center justify-center"
+                      disabled={isSubmitting}
+                    >
+                      <Send className="h-5 w-5" />
+                    </Button>
+                  </div>
                 </div>
               </form>
             ) : (
               <div className="flex items-center justify-center space-x-2 text-taupe-800">
-                <Check className="h-5 w-5" />
+                <Send className="h-5 w-5" />
                 <span>Thank you for subscribing!</span>
               </div>
             )}

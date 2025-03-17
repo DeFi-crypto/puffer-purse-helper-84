@@ -24,6 +24,14 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const handlePreOrder = () => {
+    // Redirect to Stripe checkout
+    window.location.href = 'https://checkout.stripe.com/c/pay/cs_test_a1aBCdEfGHiJKlMNOpQRstUv';
+    
+    // Note: In production, you would replace the URL above with your real Stripe checkout session URL
+    // It's best to create this session dynamically on your server for each order
+  };
+
   return (
     <header
       className={cn(
@@ -60,12 +68,12 @@ const Navbar = () => {
           >
             Updates
           </a>
-          <a 
-            href="#" 
+          <button 
+            onClick={handlePreOrder} 
             className="btn-primary"
           >
             Pre-Order Now
-          </a>
+          </button>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -114,13 +122,15 @@ const Navbar = () => {
           >
             Updates
           </a>
-          <a 
-            href="#" 
+          <button 
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              handlePreOrder();
+            }} 
             className="btn-primary text-center mt-4"
-            onClick={() => setIsMobileMenuOpen(false)}
           >
             Pre-Order Now
-          </a>
+          </button>
         </nav>
       </div>
     </header>
