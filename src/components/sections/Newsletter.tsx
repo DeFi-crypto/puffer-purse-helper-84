@@ -5,23 +5,47 @@ import AnimatedSection from '../ui/AnimatedSection';
 import { toast } from 'sonner';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import { supabase } from '@/integrations/supabase/client';
 
 const Newsletter = () => {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubscribed(true);
+    if (!email) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      
+      const response = await fetch(`${supabase.functions.url}/subscribe`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+      
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to subscribe');
+      }
+      
       setEmail('');
-      toast.success('You have been successfully subscribed!');
-    }, 1500);
+      setIsSubscribed(true);
+      toast.success(result.message || 'You have been successfully subscribed!');
+    } catch (error) {
+      console.error('Subscription error:', error);
+      toast.error(error.message || 'Failed to subscribe. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -51,6 +75,7 @@ const Newsletter = () => {
                       placeholder="Enter your email"
                       required
                       className="pr-14 h-12 border-stone-200 focus:border-taupe-500 transition-all duration-300"
+                      disabled={isSubmitting}
                     />
                     <Button 
                       type="submit" 

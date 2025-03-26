@@ -1,14 +1,56 @@
 
-import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowRight, Send } from 'lucide-react';
+import { toast } from 'sonner';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
 
 const Hero = () => {
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handlePreOrder = () => {
     // Redirect to Stripe checkout
     window.location.href = 'https://checkout.stripe.com/c/pay/cs_test_a1aBCdEfGHiJKlMNOpQRstUv';
     
     // Note: In production, you would replace the URL above with your real Stripe checkout session URL
     // It's best to create this session dynamically on your server for each order
+  };
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      
+      const response = await fetch(`${supabase.functions.url}/subscribe`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+      
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to subscribe');
+      }
+      
+      setEmail('');
+      toast.success(result.message || 'Successfully subscribed!');
+    } catch (error) {
+      console.error('Subscription error:', error);
+      toast.error(error.message || 'Failed to subscribe. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -27,6 +69,29 @@ const Hero = () => {
             <p className="body-lg text-stone-700 mb-8 max-w-xl">
               Never worry about coat check again. Our revolutionary puffer jacket transforms into a stylish leather purse in seconds, perfect for bars, concerts, and social events.
             </p>
+            
+            {/* Email subscription form */}
+            <form onSubmit={handleSubscribe} className="mb-8">
+              <div className="relative max-w-xl">
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email for updates"
+                  required
+                  className="pr-14 h-12 border-stone-200 focus:border-taupe-500 transition-all duration-300"
+                  disabled={isSubmitting}
+                />
+                <Button 
+                  type="submit" 
+                  size="icon"
+                  className="absolute right-1 top-1 bg-taupe-800 hover:bg-taupe-700 h-10 w-10 rounded-md flex items-center justify-center"
+                  disabled={isSubmitting}
+                >
+                  <Send className="h-5 w-5" />
+                </Button>
+              </div>
+            </form>
             
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
               <button 
