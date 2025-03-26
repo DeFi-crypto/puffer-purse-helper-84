@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ArrowRight, Send } from 'lucide-react';
 import { toast } from 'sonner';
@@ -29,22 +28,16 @@ const Hero = () => {
     try {
       setIsSubmitting(true);
       
-      const response = await fetch(`${supabase.functions.url}/subscribe`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
+      const { data, error } = await supabase.functions.invoke('subscribe', {
+        body: { email }
       });
       
-      const result = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to subscribe');
+      if (error) {
+        throw new Error(error.message || 'Failed to subscribe');
       }
       
       setEmail('');
-      toast.success(result.message || 'Successfully subscribed!');
+      toast.success(data?.message || 'Successfully subscribed!');
     } catch (error) {
       console.error('Subscription error:', error);
       toast.error(error.message || 'Failed to subscribe. Please try again.');
