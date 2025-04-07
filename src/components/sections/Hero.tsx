@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ArrowRight, Send } from 'lucide-react';
 import { toast } from 'sonner';
@@ -49,17 +50,17 @@ const Hero = () => {
   return (
     <section className="min-h-screen pt-24 pb-12 flex items-center relative overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute -top-20 -right-20 w-64 h-64 bg-stone-100 rounded-full opacity-50 blur-3xl animate-float"></div>
-      <div className="absolute top-1/3 -left-20 w-80 h-80 bg-ivory-100 rounded-full opacity-40 blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+      <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary/20 rounded-full opacity-30 blur-3xl animate-float"></div>
+      <div className="absolute top-1/3 -left-20 w-80 h-80 bg-secondary/20 rounded-full opacity-30 blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
       
       <div className="container-custom relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div className="order-2 lg:order-1 animate-fade-in" style={{ animationDelay: '0.3s' }}>
             <div className="tag mb-4 animate-pulse-subtle">Introducing</div>
             <h1 className="heading-xl mb-6">
-              The Jacket That <span className="text-midnight-800">Transforms</span> Into a Purse
+              The Jacket That <span className="text-primary">Transforms</span> Into a Purse
             </h1>
-            <p className="body-lg text-stone-700 mb-8 max-w-xl">
+            <p className="body-lg text-muted-foreground mb-8 max-w-xl">
               Never worry about coat check again. Our revolutionary puffer jacket transforms into a stylish leather purse in seconds, perfect for bars, concerts, and social events.
             </p>
             
@@ -72,13 +73,13 @@ const Hero = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email for updates"
                   required
-                  className="pr-14 h-12 border-stone-200 focus:border-taupe-500 transition-all duration-300"
+                  className="pr-14 h-12 bg-black/60 border-white/10 focus:border-primary transition-all duration-300 text-foreground"
                   disabled={isSubmitting}
                 />
                 <Button 
                   type="submit" 
                   size="icon"
-                  className="absolute right-1 top-1 bg-taupe-800 hover:bg-taupe-700 h-10 w-10 rounded-md flex items-center justify-center"
+                  className="absolute right-1 top-1 bg-primary hover:bg-primary/80 text-black h-10 w-10 rounded-md flex items-center justify-center"
                   disabled={isSubmitting}
                 >
                   <Send className="h-5 w-5" />
@@ -101,11 +102,11 @@ const Hero = () => {
             
             <div className="flex items-center mt-10 space-x-6">
               <div className="flex -space-x-2">
-                <div className="w-8 h-8 rounded-full bg-stone-300 border-2 border-white"></div>
-                <div className="w-8 h-8 rounded-full bg-stone-400 border-2 border-white"></div>
-                <div className="w-8 h-8 rounded-full bg-stone-500 border-2 border-white"></div>
+                <div className="w-8 h-8 rounded-full bg-black/50 border-2 border-primary/30"></div>
+                <div className="w-8 h-8 rounded-full bg-black/60 border-2 border-primary/30"></div>
+                <div className="w-8 h-8 rounded-full bg-black/70 border-2 border-primary/30"></div>
               </div>
-              <div className="text-sm text-stone-600">
+              <div className="text-sm text-muted-foreground">
                 <span className="font-semibold">300+</span> 
                 <span className="ml-1">early adopters</span>
               </div>
@@ -115,7 +116,7 @@ const Hero = () => {
           <div className="order-1 lg:order-2 max-w-md mx-auto lg:max-w-none animate-fade-in" style={{ animationDelay: '0.6s' }}>
             <div className="relative">
               {/* Product image */}
-              <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-stone-100 to-stone-200 shadow-lg">
+              <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100 shadow-lg">
                 <img 
                   src="/lovable-uploads/d9d5597b-edb6-4a76-b148-90abf928a78d.png" 
                   alt="Minny Transformable Jacket" 
@@ -124,8 +125,8 @@ const Hero = () => {
               </div>
               
               {/* Accent elements */}
-              <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-lg bg-taupe-500 opacity-80"></div>
-              <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full bg-midnight-300 opacity-70"></div>
+              <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-lg bg-secondary opacity-70"></div>
+              <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full bg-primary opacity-70"></div>
             </div>
           </div>
         </div>

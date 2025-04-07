@@ -80,17 +80,17 @@ const Features = () => {
         
         <AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center p-8 glass-panel border border-primary/20 hover:border-primary/40 transition-all duration-300">
+            <div className="text-center p-8 glass-panel border border-white/10 hover:border-white/20 transition-all duration-300">
               <div className="text-4xl font-bold text-primary mb-2 neon-text">30s</div>
               <p className="text-muted-foreground">Transform Time</p>
             </div>
             
-            <div className="text-center p-8 glass-panel border border-secondary/20 hover:border-secondary/40 transition-all duration-300">
+            <div className="text-center p-8 glass-panel border border-white/10 hover:border-white/20 transition-all duration-300">
               <div className="text-4xl font-bold text-secondary mb-2 neon-text">5+</div>
               <p className="text-muted-foreground">Color Options</p>
             </div>
             
-            <div className="text-center p-8 glass-panel border border-accent/20 hover:border-accent/40 transition-all duration-300">
+            <div className="text-center p-8 glass-panel border border-white/10 hover:border-white/20 transition-all duration-300">
               <div className="text-4xl font-bold text-accent mb-2 neon-text">100%</div>
               <p className="text-muted-foreground">Convenience</p>
             </div>

@@ -55,11 +55,15 @@ const ProductTransform = ({ className }: ProductTransformProps) => {
             isTransforming ? "opacity-100" : "opacity-0"
           )}
         >
-          <div className="animate-product-transform w-3/4 h-3/4 bg-gradient-to-r from-taupe-300 to-midnight-300 rounded-lg shadow-lg flex items-center justify-center text-white font-medium">
+          <div className="animate-product-transform w-3/4 h-3/4 bg-gradient-to-r from-secondary/70 to-primary/70 rounded-lg shadow-lg flex items-center justify-center text-white font-medium">
             Transforming...
           </div>
         </div>
       </div>
+      
+      {/* Added accent elements with updated colors */}
+      <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-lg bg-secondary opacity-70"></div>
+      <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full bg-primary opacity-70"></div>
       
       <button 
         onClick={handleTransform}
