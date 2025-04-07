@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
 import AnimatedSection from '../ui/AnimatedSection';
@@ -42,17 +43,17 @@ const Newsletter = () => {
   };
 
   return (
-    <section id="newsletter" className="section-padding bg-stone-50 relative overflow-hidden">
+    <section id="newsletter" className="section-padding bg-background relative overflow-hidden">
       {/* Background design elements */}
-      <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-taupe-100 rounded-full opacity-60 blur-3xl"></div>
-      <div className="absolute top-20 right-20 w-64 h-64 bg-midnight-100 rounded-full opacity-40 blur-3xl"></div>
+      <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-primary/20 rounded-full opacity-30 blur-3xl"></div>
+      <div className="absolute top-20 right-20 w-64 h-64 bg-secondary/20 rounded-full opacity-20 blur-3xl"></div>
       
       <div className="container-custom max-w-5xl relative z-10">
         <AnimatedSection>
-          <div className="glass-panel p-8 md:p-16 rounded-2xl text-center">
+          <div className="glass-panel p-8 md:p-16 rounded-2xl text-center border border-white/5 hover:border-white/10 transition-all duration-300">
             <div className="tag mb-4 inline-block">Stay Updated</div>
-            <h2 className="heading-md mb-6">Be The First To Know</h2>
-            <p className="body-md text-stone-600 max-w-2xl mx-auto mb-8">
+            <h2 className="heading-md mb-6 text-foreground">Be The First To Know</h2>
+            <p className="body-md text-muted-foreground max-w-2xl mx-auto mb-8">
               Join our exclusive waiting list for product updates, launch information, and early-bird pricing. 
               Be among the first to experience the future of transformable fashion.
             </p>
@@ -67,13 +68,13 @@ const Newsletter = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter your email"
                       required
-                      className="pr-14 h-12 border-stone-200 focus:border-taupe-500 transition-all duration-300"
+                      className="pr-14 h-12 bg-black/60 border-white/10 focus:border-primary transition-all duration-300 text-foreground"
                       disabled={isSubmitting}
                     />
                     <Button 
                       type="submit" 
                       size="icon"
-                      className="absolute right-1 top-1 bg-taupe-800 hover:bg-taupe-700 h-10 w-10 rounded-md flex items-center justify-center"
+                      className="absolute right-1 top-1 bg-primary hover:bg-primary/80 text-black h-10 w-10 rounded-md flex items-center justify-center"
                       disabled={isSubmitting}
                     >
                       <Send className="h-5 w-5" />
@@ -82,13 +83,13 @@ const Newsletter = () => {
                 </div>
               </form>
             ) : (
-              <div className="flex items-center justify-center space-x-2 text-taupe-800">
+              <div className="flex items-center justify-center space-x-2 text-primary">
                 <Send className="h-5 w-5" />
                 <span>Thank you for subscribing!</span>
               </div>
             )}
             
-            <div className="mt-10 text-sm text-stone-500">
+            <div className="mt-10 text-sm text-muted-foreground">
               By subscribing, you agree to receive product updates and marketing communications from us.
               You can unsubscribe at any time.
             </div>
