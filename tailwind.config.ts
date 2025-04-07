@@ -72,6 +72,13 @@ export default {
 					800: '#333385',
 					900: '#191970',
 				},
+				neon: {
+					green: '#00FF99',
+					blue: '#00FFFF',
+					purple: '#BF00FF',
+					pink: '#FF00BF',
+					yellow: '#FFFF00',
+				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
@@ -150,6 +157,14 @@ export default {
 				'pulse-subtle': {
 					'0%, 100%': { opacity: '1' },
 					'50%': { opacity: '0.8' }
+				},
+				'glow': {
+					'0%, 100%': { 
+						boxShadow: '0 0 5px rgba(0, 255, 153, 0.5), 0 0 10px rgba(0, 255, 153, 0.3)' 
+					},
+					'50%': { 
+						boxShadow: '0 0 15px rgba(0, 255, 153, 0.8), 0 0 20px rgba(0, 255, 153, 0.5)' 
+					}
 				}
 			},
 			animation: {
@@ -160,7 +175,8 @@ export default {
 				'fade-in-right': 'fade-in-right 0.7s ease-out forwards',
 				'product-transform': 'product-transform 3s ease-in-out',
 				'float': 'float 6s ease-in-out infinite',
-				'pulse-subtle': 'pulse-subtle 3s ease-in-out infinite'
+				'pulse-subtle': 'pulse-subtle 3s ease-in-out infinite',
+				'glow': 'glow 2s ease-in-out infinite'
 			}
 		}
 	},
