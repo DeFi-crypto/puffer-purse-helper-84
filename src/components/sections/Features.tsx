@@ -7,9 +7,7 @@ import ProductTransform from '../ui/ProductTransform';
 const Features = () => {
   return (
     <section id="features" className="section-padding bg-background relative overflow-hidden">
-      {/* Background accents */}
-      <div className="absolute top-1/4 right-0 w-64 h-64 bg-primary/20 rounded-full opacity-30 blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/20 rounded-full opacity-20 blur-3xl"></div>
+      {/* Background accents - removed */}
       
       <div className="container-custom relative z-10">
         <AnimatedSection>
@@ -81,17 +79,17 @@ const Features = () => {
         <AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center p-8 glass-panel border border-white/10 hover:border-white/20 transition-all duration-300">
-              <div className="text-4xl font-bold text-primary mb-2 neon-text">30s</div>
+              <div className="text-4xl font-bold text-primary mb-2">30s</div>
               <p className="text-muted-foreground">Transform Time</p>
             </div>
             
             <div className="text-center p-8 glass-panel border border-white/10 hover:border-white/20 transition-all duration-300">
-              <div className="text-4xl font-bold text-secondary mb-2 neon-text">5+</div>
+              <div className="text-4xl font-bold text-secondary mb-2">5+</div>
               <p className="text-muted-foreground">Color Options</p>
             </div>
             
             <div className="text-center p-8 glass-panel border border-white/10 hover:border-white/20 transition-all duration-300">
-              <div className="text-4xl font-bold text-accent mb-2 neon-text">100%</div>
+              <div className="text-4xl font-bold text-accent mb-2">100%</div>
               <p className="text-muted-foreground">Convenience</p>
             </div>
           </div>

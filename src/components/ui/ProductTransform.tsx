@@ -61,9 +61,7 @@ const ProductTransform = ({ className }: ProductTransformProps) => {
         </div>
       </div>
       
-      {/* Added accent elements with updated colors */}
-      <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-lg bg-secondary opacity-70"></div>
-      <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full bg-primary opacity-70"></div>
+      {/* Removed accent elements */}
       
       <button 
         onClick={handleTransform}
