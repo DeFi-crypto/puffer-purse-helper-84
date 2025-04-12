@@ -32,11 +32,7 @@ const UseCases = () => {
                 Stay warm on your way to the venue, then transform your jacket into a purse 
                 once inside. No more sweating during performances or losing your coat at the venue.
               </p>
-              <div className="h-48 bg-stone-200 rounded-lg overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center">
-                  Concert Image Placeholder
-                </div>
-              </div>
+              {/* Removed image placeholder */}
             </div>
           </AnimatedSection>
           
@@ -50,11 +46,7 @@ const UseCases = () => {
                 Never deal with overcrowded coat checks again. Transform your jacket into a stylish 
                 purse that complements your outfit while keeping your essentials secure.
               </p>
-              <div className="h-48 bg-stone-200 rounded-lg overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center">
-                  Bar Image Placeholder
-                </div>
-              </div>
+              {/* Removed image placeholder */}
             </div>
           </AnimatedSection>
           
@@ -68,11 +60,7 @@ const UseCases = () => {
                 From gallery openings to dinner parties, make transitions between outdoor and indoor 
                 spaces seamless while maintaining your aesthetic with our transformable design.
               </p>
-              <div className="h-48 bg-stone-200 rounded-lg overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center">
-                  Event Image Placeholder
-                </div>
-              </div>
+              {/* Removed image placeholder */}
             </div>
           </AnimatedSection>
         </div>

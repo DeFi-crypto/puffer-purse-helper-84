@@ -100,17 +100,7 @@ const Hero = () => {
               </a>
             </div>
             
-            <div className="flex items-center mt-10 space-x-6">
-              <div className="flex -space-x-2">
-                <div className="w-8 h-8 rounded-full bg-black/50 border-2 border-primary/30"></div>
-                <div className="w-8 h-8 rounded-full bg-black/60 border-2 border-primary/30"></div>
-                <div className="w-8 h-8 rounded-full bg-black/70 border-2 border-primary/30"></div>
-              </div>
-              <div className="text-sm text-muted-foreground">
-                <span className="font-semibold">300+</span> 
-                <span className="ml-1">early adopters</span>
-              </div>
-            </div>
+            {/* Removed the 300+ early adopters section */}
           </div>
           
           <div className="order-1 lg:order-2 max-w-md mx-auto lg:max-w-none animate-fade-in" style={{ animationDelay: '0.6s' }}>

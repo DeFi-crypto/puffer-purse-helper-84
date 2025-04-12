@@ -77,16 +77,13 @@ const Features = () => {
         </div>
         
         <AnimatedSection>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="text-center p-8 glass-panel border border-white/10 hover:border-white/20 transition-all duration-300">
               <div className="text-4xl font-bold text-primary mb-2">30s</div>
               <p className="text-muted-foreground">Transform Time</p>
             </div>
             
-            <div className="text-center p-8 glass-panel border border-white/10 hover:border-white/20 transition-all duration-300">
-              <div className="text-4xl font-bold text-secondary mb-2">5+</div>
-              <p className="text-muted-foreground">Color Options</p>
-            </div>
+            {/* Removed the "5+ Color Options" square */}
             
             <div className="text-center p-8 glass-panel border border-white/10 hover:border-white/20 transition-all duration-300">
               <div className="text-4xl font-bold text-accent mb-2">100%</div>
