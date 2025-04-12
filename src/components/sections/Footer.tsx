@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="container-custom">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div className="md:col-span-2">
-            <h2 className="text-2xl font-bold mb-4 text-primary neon-text">TRANSFORM</h2>
+            <h2 className="text-2xl font-bold mb-4 text-primary neon-text">Minny</h2>
             <p className="text-gray-300 max-w-md">
               Revolutionizing winter wear with our innovative transformable jacket to purse design.
               Never worry about coat check again.
@@ -42,22 +42,14 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4 text-accent">Contact</h3>
             <ul className="space-y-2">
-              <li className="text-gray-300">support@transform.com</li>
-              <li className="text-gray-300">+1 (555) 123-4567</li>
-              <li className="text-gray-300">123 Fashion Ave, New York, NY</li>
+              <li className="text-gray-300">contact@minnyapparel.com</li>
             </ul>
           </div>
         </div>
         
         <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
           <div className="text-gray-400 text-sm mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} Transform. All rights reserved.
-          </div>
-          
-          <div className="flex space-x-6 text-sm">
-            <a href="#" className="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
-            <a href="#" className="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
-            <a href="#" className="text-gray-400 hover:text-primary transition-colors">FAQ</a>
+            &copy; {new Date().getFullYear()} Minny. All rights reserved.
           </div>
         </div>
       </div>

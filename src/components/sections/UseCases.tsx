@@ -32,7 +32,6 @@ const UseCases = () => {
                 Stay warm on your way to the venue, then transform your jacket into a purse 
                 once inside. No more sweating during performances or losing your coat at the venue.
               </p>
-              {/* Removed image placeholder */}
             </div>
           </AnimatedSection>
           
@@ -46,7 +45,6 @@ const UseCases = () => {
                 Never deal with overcrowded coat checks again. Transform your jacket into a stylish 
                 purse that complements your outfit while keeping your essentials secure.
               </p>
-              {/* Removed image placeholder */}
             </div>
           </AnimatedSection>
           
@@ -60,29 +58,43 @@ const UseCases = () => {
                 From gallery openings to dinner parties, make transitions between outdoor and indoor 
                 spaces seamless while maintaining your aesthetic with our transformable design.
               </p>
-              {/* Removed image placeholder */}
             </div>
           </AnimatedSection>
         </div>
         
-        <AnimatedSection>
-          <div className="glass-panel p-8 md:p-12 rounded-2xl">
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="mb-8 md:mb-0 md:mr-12 md:w-1/2">
-                <div className="tag mb-4">Testimonial</div>
-                <h3 className="text-2xl font-semibold mb-4">What Our Early Users Say</h3>
-                <div className="text-lg text-stone-700 italic">
-                  "I've lost so many jackets at bars because I didn't want to carry them all night. 
-                  This ingenious design has saved me money and added convenience to my social life."
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <AnimatedSection>
+            <div className="glass-panel p-8 md:p-12 rounded-2xl">
+              <div className="flex flex-col">
+                <div className="mb-8">
+                  <div className="tag mb-4">Testimonial</div>
+                  <h3 className="text-2xl font-semibold mb-4">What Our Early Users Say</h3>
+                  <div className="text-lg text-stone-700 italic">
+                    "I've lost so many jackets at bars because I didn't want to carry them all night. 
+                    This ingenious design has saved me money and added convenience to my social life."
+                  </div>
+                  <div className="mt-4 font-medium">— Anonymous</div>
                 </div>
-                <div className="mt-4 font-medium">— Samantha K., New York</div>
-              </div>
-              <div className="w-full md:w-1/2 bg-stone-200 rounded-xl h-64 flex items-center justify-center">
-                <div>Testimonial Image Placeholder</div>
               </div>
             </div>
-          </div>
-        </AnimatedSection>
+          </AnimatedSection>
+          
+          <AnimatedSection delay={100}>
+            <div className="glass-panel p-8 md:p-12 rounded-2xl">
+              <div className="flex flex-col">
+                <div className="mb-8">
+                  <div className="tag mb-4">Testimonial</div>
+                  <h3 className="text-2xl font-semibold mb-4">More User Feedback</h3>
+                  <div className="text-lg text-stone-700 italic">
+                    "The Minny jacket is a game-changer for city life. I no longer have to choose between 
+                    being cold or carrying my bulky coat around all night. Absolute genius!"
+                  </div>
+                  <div className="mt-4 font-medium">— Anonymous</div>
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
       </div>
     </section>
   );
