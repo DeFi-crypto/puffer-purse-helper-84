@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -39,10 +40,10 @@ const Navbar = () => {
       )}
     >
       <div className="container-custom flex justify-between items-center">
-        <a href="#" className="flex items-center">
+        <a href="#" className="flex items-center" aria-label="Minny - University of Minnesota startup">
           <img 
             src="/lovable-uploads/9575f4c8-b4b8-46cc-9487-939b865fc223.png" 
-            alt="Minny Logo" 
+            alt="Minny Logo - Transformable jacket to purse" 
             className="h-10 md:h-12 neon-text"
           />
         </a>
@@ -59,6 +60,12 @@ const Navbar = () => {
             className="text-primary hover:text-primary/80 transition-colors"
           >
             Use Cases
+          </a>
+          <a 
+            href="#faq" 
+            className="text-primary hover:text-primary/80 transition-colors"
+          >
+            FAQ
           </a>
           <a 
             href="#newsletter" 
@@ -92,7 +99,7 @@ const Navbar = () => {
         <div className="flex justify-center mb-8">
           <img 
             src="/lovable-uploads/9575f4c8-b4b8-46cc-9487-939b865fc223.png" 
-            alt="Minny Logo" 
+            alt="Minny Logo - Transformable jacket to purse" 
             className="h-10"
           />
         </div>
@@ -110,6 +117,13 @@ const Navbar = () => {
             onClick={() => setIsMobileMenuOpen(false)}
           >
             Use Cases
+          </a>
+          <a 
+            href="#faq" 
+            className="text-primary hover:text-primary/80 transition-colors py-2 border-b border-muted"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            FAQ
           </a>
           <a 
             href="#newsletter" 

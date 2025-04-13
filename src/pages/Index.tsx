@@ -5,12 +5,13 @@ import Hero from '@/components/sections/Hero';
 import Features from '@/components/sections/Features';
 import UseCases from '@/components/sections/UseCases';
 import Newsletter from '@/components/sections/Newsletter';
+import FAQ from '@/components/sections/FAQ';
 import Footer from '@/components/sections/Footer';
 
 const Index = () => {
   useEffect(() => {
     // Update document title
-    document.title = "Minny - Transformable Puffer Jacket";
+    document.title = "Minny | The Jacket That Transforms Into a Purse";
     
     // Smooth scroll behavior for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -43,6 +44,7 @@ const Index = () => {
         <Hero />
         <Features />
         <UseCases />
+        <FAQ />
         <Newsletter />
       </main>
       <Footer />

@@ -61,7 +61,8 @@ const Hero = () => {
               The Jacket That <span className="text-primary">Transforms</span> Into a Purse
             </h1>
             <p className="body-lg text-muted-foreground mb-8 max-w-xl">
-              Never worry about coat check again. Our revolutionary puffer jacket transforms into a stylish leather purse in seconds, perfect for bars, concerts, and social events.
+              From the University of Minnesota, Minny is reinventing winter wear with our transformable puffer jacket. 
+              Perfect for concerts, bars, and social events—never worry about coat check again.
             </p>
             
             {/* Email subscription form */}
@@ -99,8 +100,6 @@ const Hero = () => {
                 Learn More
               </a>
             </div>
-            
-            {/* Removed the 300+ early adopters section */}
           </div>
           
           <div className="order-1 lg:order-2 max-w-md mx-auto lg:max-w-none animate-fade-in" style={{ animationDelay: '0.6s' }}>
@@ -109,7 +108,7 @@ const Hero = () => {
               <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100 shadow-lg">
                 <img 
                   src="/lovable-uploads/d9d5597b-edb6-4a76-b148-90abf928a78d.png" 
-                  alt="Minny Transformable Jacket" 
+                  alt="Puffer jacket that transforms into purse" 
                   className="w-full h-full object-contain p-4"
                 />
               </div>
