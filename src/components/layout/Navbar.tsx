@@ -41,7 +41,7 @@ const Navbar = () => {
       <div className="container-custom flex justify-between items-center">
         <a href="#" className="flex items-center">
           <img 
-            src="/lovable-uploads/fa56ac6b-44e3-49b4-aa8d-071b071a0106.png" 
+            src="/lovable-uploads/9575f4c8-b4b8-46cc-9487-939b865fc223.png" 
             alt="Minny Logo" 
             className="h-10 md:h-12 neon-text"
           />
@@ -91,7 +91,7 @@ const Navbar = () => {
       >
         <div className="flex justify-center mb-8">
           <img 
-            src="/lovable-uploads/fa56ac6b-44e3-49b4-aa8d-071b071a0106.png" 
+            src="/lovable-uploads/9575f4c8-b4b8-46cc-9487-939b865fc223.png" 
             alt="Minny Logo" 
             className="h-10"
           />
