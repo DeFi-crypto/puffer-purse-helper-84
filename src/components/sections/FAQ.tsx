@@ -20,7 +20,7 @@ const FAQ = () => {
     },
     {
       question: "What can I fit in the purse when transformed?",
-      answer: "The transformed purse has enough room for essentials like your phone, wallet, keys, makeup, and even a small water bottle. The convertible outerwear is designed to hold everything you'd need for a night out while keeping your hands free."
+      answer: "The transformed purse has enough room for essentials like your phone, wallet, keys, makeup.  The convertible outerwear is designed to hold everything you'd need for a night out while keeping your hands free."
     },
     {
       question: "Can I wash the jacket?",
@@ -28,7 +28,7 @@ const FAQ = () => {
     },
     {
       question: "When will my order ship?",
-      answer: "We're currently accepting pre-orders for our first production run. Orders are expected to ship within 8-10 weeks from the pre-order date. You'll receive tracking information as soon as your coat purse hybrid ships."
+      answer: "We're currently accepting pre-orders for our first production run. Orders are expected to ship within when we launch. You'll receive tracking information as soon as your coat purse hybrid ships."
     },
     {
       question: "Do you offer international shipping?",
