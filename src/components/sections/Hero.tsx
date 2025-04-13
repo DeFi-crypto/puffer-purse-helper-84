@@ -11,11 +11,11 @@ const Hero = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handlePreOrder = () => {
-    // Redirect to Stripe checkout
-    window.location.href = 'https://checkout.stripe.com/c/pay/cs_test_a1aBCdEfGHiJKlMNOpQRstUv';
-    
-    // Note: In production, you would replace the URL above with your real Stripe checkout session URL
-    // It's best to create this session dynamically on your server for each order
+    // Scroll to newsletter section instead of redirecting
+    const newsletterSection = document.getElementById('newsletter');
+    if (newsletterSection) {
+      newsletterSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleSubscribe = async (e: React.FormEvent) => {

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -25,11 +24,10 @@ const Navbar = () => {
   };
 
   const handlePreOrder = () => {
-    // Redirect to Stripe checkout
-    window.location.href = 'https://checkout.stripe.com/c/pay/cs_test_a1aBCdEfGHiJKlMNOpQRstUv';
-    
-    // Note: In production, you would replace the URL above with your real Stripe checkout session URL
-    // It's best to create this session dynamically on your server for each order
+    const newsletterSection = document.getElementById('newsletter');
+    if (newsletterSection) {
+      newsletterSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
