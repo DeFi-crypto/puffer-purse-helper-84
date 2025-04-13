@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -42,13 +41,12 @@ const Navbar = () => {
       <div className="container-custom flex justify-between items-center">
         <a href="#" className="flex items-center">
           <img 
-            src="/lovable-uploads/26bf3933-f082-41d8-9f43-d6fd9fc0c29d.png" 
+            src="/lovable-uploads/fa56ac6b-44e3-49b4-aa8d-071b071a0106.png" 
             alt="Minny Logo" 
             className="h-10 md:h-12 neon-text"
           />
         </a>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-8 items-center">
           <a 
             href="#features" 
@@ -76,7 +74,6 @@ const Navbar = () => {
           </button>
         </nav>
 
-        {/* Mobile Menu Button */}
         <button 
           className="md:hidden text-primary"
           onClick={toggleMobileMenu}
@@ -86,7 +83,6 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       <div
         className={cn(
           'fixed inset-0 bg-background z-40 flex flex-col pt-24 px-6 transform transition-transform duration-300 ease-in-out md:hidden',
@@ -95,7 +91,7 @@ const Navbar = () => {
       >
         <div className="flex justify-center mb-8">
           <img 
-            src="/lovable-uploads/26bf3933-f082-41d8-9f43-d6fd9fc0c29d.png" 
+            src="/lovable-uploads/fa56ac6b-44e3-49b4-aa8d-071b071a0106.png" 
             alt="Minny Logo" 
             className="h-10"
           />
