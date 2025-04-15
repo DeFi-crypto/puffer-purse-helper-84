@@ -27,7 +27,7 @@ const FAQ = () => {
       answer: "Yes, our transforming winter jacket is machine washable on a gentle cycle with cold water. We recommend air drying to maintain the integrity of the materials and transformation mechanism."
     },
     {
-      question: "When will my order ship?",
+      question: "Can I buy the transformative coat right now?",
       answer: "We're currently accepting pre-orders for our first production run. Orders are expected to ship within when we launch. You'll receive tracking information as soon as your coat purse hybrid ships."
     },
     {
