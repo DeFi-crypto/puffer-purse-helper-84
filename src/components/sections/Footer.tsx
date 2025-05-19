@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Instagram, Twitter, Facebook, Mail } from 'lucide-react';
+import { Instagram } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -14,17 +14,14 @@ const Footer = () => {
               Never worry about coat check again.
             </p>
             <div className="flex space-x-4 mt-6">
-              <a href="#" className="text-primary hover:text-primary/80 transition-colors" aria-label="Instagram">
+              <a 
+                href="https://www.instagram.com/minnyapparel/" 
+                className="text-primary hover:text-primary/80 transition-colors" 
+                aria-label="Instagram"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Instagram size={20} />
-              </a>
-              <a href="#" className="text-primary hover:text-primary/80 transition-colors" aria-label="Twitter">
-                <Twitter size={20} />
-              </a>
-              <a href="#" className="text-primary hover:text-primary/80 transition-colors" aria-label="Facebook">
-                <Facebook size={20} />
-              </a>
-              <a href="#" className="text-primary hover:text-primary/80 transition-colors" aria-label="Email">
-                <Mail size={20} />
               </a>
             </div>
           </div>
