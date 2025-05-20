@@ -49,11 +49,18 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} Minny. All rights reserved.
           </div>
           <div>
-            <img 
-              src="/lovable-uploads/bd4c449a-9276-43e2-b2ef-de88c03e2a85.png" 
-              alt="Minnesota Cup 2025 Semifinalist" 
-              className="h-16 md:h-16" 
-            />
+            <a 
+              href="https://carlsonschool.umn.edu/mncup/2025MNCupSemis#:~:text=window%20or%20tab)-,Minny,-(this%20link%20opens" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label="Minnesota Cup 2025 Semifinalist"
+            >
+              <img 
+                src="/lovable-uploads/bd4c449a-9276-43e2-b2ef-de88c03e2a85.png" 
+                alt="Minnesota Cup 2025 Semifinalist" 
+                className="h-16 md:h-16 hover:opacity-90 transition-opacity" 
+              />
+            </a>
           </div>
         </div>
       </div>
