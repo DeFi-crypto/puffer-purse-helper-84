@@ -48,6 +48,13 @@ const Footer = () => {
           <div className="text-gray-400 text-sm mb-4 md:mb-0">
             &copy; {new Date().getFullYear()} Minny. All rights reserved.
           </div>
+          <div>
+            <img 
+              src="/lovable-uploads/bd4c449a-9276-43e2-b2ef-de88c03e2a85.png" 
+              alt="Minnesota Cup 2025 Semifinalist" 
+              className="h-16 md:h-16" 
+            />
+          </div>
         </div>
       </div>
     </footer>
