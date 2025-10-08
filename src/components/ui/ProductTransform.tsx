@@ -28,24 +28,13 @@ const ProductTransform = ({ className }: ProductTransformProps) => {
             isTransforming ? "opacity-0" : "opacity-100"
           )}
         >
-          {productState === 'jacket' ? (
-            <div className="w-full h-full flex items-center justify-center p-4">
-              <img 
-                src="/lovable-uploads/d9d5597b-edb6-4a76-b148-90abf928a78d.png" 
-                alt="Minny Puffer Jacket" 
-                className="w-full h-full object-contain"
-              />
-            </div>
-          ) : (
-            <div className="w-full h-full flex items-center justify-center p-4">
-              <img 
-                src="/lovable-uploads/d9d5597b-edb6-4a76-b148-90abf928a78d.png" 
-                alt="Minny Leather Purse"
-                className="w-full h-full object-contain object-right"
-                style={{ objectPosition: "95% center" }}
-              />
-            </div>
-          )}
+          <div className="w-full h-full flex items-center justify-center">
+            <img 
+              src="/lovable-uploads/MinnyCoatPurse.png" 
+              alt={productState === 'jacket' ? 'Minny Puffer Jacket transforms into purse' : 'Minny Purse transforms into jacket'}
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
         
         {/* Animation overlay */}

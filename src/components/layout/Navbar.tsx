@@ -89,56 +89,65 @@ const Navbar = () => {
       </div>
 
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 bg-background z-40 md:hidden">
-          <div className="flex flex-col h-full pt-24 px-6">
-            <div className="flex justify-center mb-8">
-              <img 
-                src="/lovable-uploads/9575f4c8-b4b8-46cc-9487-939b865fc223.png" 
-                alt="Minny Logo - Transformable jacket to purse" 
-                className="h-10"
-              />
+        <>
+          {/* Backdrop overlay */}
+          <div 
+            className="fixed inset-0 bg-background/95 backdrop-blur-sm z-40 md:hidden"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          
+          {/* Menu content */}
+          <div className="fixed inset-0 z-40 flex items-center justify-center md:hidden pointer-events-none">
+            <div className="w-full max-w-md pointer-events-auto">
+              <div className="flex justify-center mb-8">
+                <img 
+                  src="/lovable-uploads/9575f4c8-b4b8-46cc-9487-939b865fc223.png" 
+                  alt="Minny Logo - Transformable jacket to purse" 
+                  className="h-10"
+                />
+              </div>
+              <nav className="flex flex-col space-y-6 text-lg px-6">
+                <a 
+                  href="#features" 
+                  className="text-primary hover:text-primary/80 transition-colors py-2 border-b border-muted text-center"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Features
+                </a>
+                <a 
+                  href="#use-cases" 
+                  className="text-primary hover:text-primary/80 transition-colors py-2 border-b border-muted text-center"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Use Cases
+                </a>
+                <a 
+                  href="#faq" 
+                  className="text-primary hover:text-primary/80 transition-colors py-2 border-b border-muted text-center"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  FAQ
+                </a>
+                <a 
+                  href="#newsletter" 
+                  className="text-primary hover:text-primary/80 transition-colors py-2 border-b border-muted text-center"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Updates
+                </a>
+                <button 
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    handlePreOrder();
+                  }} 
+                  className="btn-primary text-center mt-4"
+                >
+                  Pre-Order Now
+                </button>
+              </nav>
             </div>
-        <nav className="flex flex-col space-y-6 text-lg">
-          <a 
-            href="#features" 
-            className="text-primary hover:text-primary/80 transition-colors py-2 border-b border-muted"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Features
-          </a>
-          <a 
-            href="#use-cases" 
-            className="text-primary hover:text-primary/80 transition-colors py-2 border-b border-muted"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Use Cases
-          </a>
-          <a 
-            href="#faq" 
-            className="text-primary hover:text-primary/80 transition-colors py-2 border-b border-muted"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            FAQ
-          </a>
-          <a 
-            href="#newsletter" 
-            className="text-primary hover:text-primary/80 transition-colors py-2 border-b border-muted"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Updates
-          </a>
-          <button 
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-              handlePreOrder();
-            }} 
-            className="btn-primary text-center mt-4"
-          >
-            Pre-Order Now
-          </button>
-        </nav>
           </div>
-        </div>
+        </>
       )}
     </header>
   );

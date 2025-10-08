@@ -110,9 +110,9 @@ const Hero = () => {
               {/* Product image */}
               <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100 shadow-lg">
                 <img 
-                  src="/lovable-uploads/d9d5597b-edb6-4a76-b148-90abf928a78d.png" 
-                  alt="Puffer jacket that transforms into purse" 
-                  className="w-full h-full object-contain p-4"
+                  src="/lovable-uploads/MinnyCoatPurse.png" 
+                  alt="Minny transformable jacket and purse - coat that turns into a bag" 
+                  className="w-full h-full object-cover"
                 />
               </div>
               
