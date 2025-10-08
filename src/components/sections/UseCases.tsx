@@ -14,9 +14,12 @@ const UseCases = () => {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="tag mb-4">Perfect For</div>
             <h2 className="heading-lg mb-6">For Your Social Lifestyle</h2>
-            <p className="body-md text-stone-600 max-w-2xl mx-auto">
+            <p className="body-md text-stone-600 max-w-2xl mx-auto mb-4">
               Whether you're heading to a concert, bar-hopping with friends, or attending a social event, 
-              our transformable jacket is designed to make your night out easier and more enjoyable.
+              our transformable jacket is designed to make your night out easier and more enjoyable. This stylish winter coat for concerts and social events eliminates the hassle of coat check lines and lost jackets.
+            </p>
+            <p className="body-md text-stone-600 max-w-2xl mx-auto">
+              Our coat to bag design means you'll never have to choose between staying warm and traveling light. Perfect for Minnesota winters and the active social scene around the University of Minnesota, this coat purse hybrid keeps you comfortable outdoors and hands-free indoors. The transforming winter jacket is ideal for anyone who loves going out but hates dealing with bulky coats at venues.
             </p>
           </div>
         </AnimatedSection>

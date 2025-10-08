@@ -14,9 +14,12 @@ const Features = () => {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="tag inline-block mb-4">Revolutionary Design</div>
             <h2 className="heading-lg mb-6 text-foreground">One Product, Two Functions</h2>
-            <p className="body-md text-muted-foreground max-w-2xl mx-auto">
+            <p className="body-md text-muted-foreground max-w-2xl mx-auto mb-4">
               Our innovative design allows you to transform your winter puffer jacket into a 
-              stylish leather purse in seconds. Experience the perfect blend of functionality and fashion.
+              stylish leather purse in seconds. This purse that changes into a winter coat represents the perfect blend of functionality and fashion for the modern lifestyle.
+            </p>
+            <p className="body-md text-muted-foreground max-w-2xl mx-auto">
+              Designed by University of Minnesota students who understand harsh winters and active social lives, our transforming winter jacket solves the age-old problem of what to do with your bulky coat at concerts, bars, and events. The convertible outerwear instantly becomes a compact purse with storage, keeping your essentials secure while you enjoy your night out. When it's time to leave, transform it back into a warm winter coat in seconds.
             </p>
           </div>
         </AnimatedSection>

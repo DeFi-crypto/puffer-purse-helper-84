@@ -80,7 +80,7 @@ const Navbar = () => {
         </nav>
 
         <button 
-          className="md:hidden text-primary"
+          className="md:hidden text-primary z-50 relative"
           onClick={toggleMobileMenu}
           aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
         >
@@ -88,19 +88,16 @@ const Navbar = () => {
         </button>
       </div>
 
-      <div
-        className={cn(
-          'fixed inset-0 bg-background z-40 flex flex-col pt-24 px-6 transform transition-transform duration-300 ease-in-out md:hidden',
-          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        )}
-      >
-        <div className="flex justify-center mb-8">
-          <img 
-            src="/lovable-uploads/9575f4c8-b4b8-46cc-9487-939b865fc223.png" 
-            alt="Minny Logo - Transformable jacket to purse" 
-            className="h-10"
-          />
-        </div>
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 bg-background z-40 md:hidden">
+          <div className="flex flex-col h-full pt-24 px-6">
+            <div className="flex justify-center mb-8">
+              <img 
+                src="/lovable-uploads/9575f4c8-b4b8-46cc-9487-939b865fc223.png" 
+                alt="Minny Logo - Transformable jacket to purse" 
+                className="h-10"
+              />
+            </div>
         <nav className="flex flex-col space-y-6 text-lg">
           <a 
             href="#features" 
@@ -140,7 +137,9 @@ const Navbar = () => {
             Pre-Order Now
           </button>
         </nav>
-      </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

@@ -62,7 +62,10 @@ const Hero = () => {
             </h1>
             <p className="body-lg text-muted-foreground mb-8 max-w-xl">
               From the University of Minnesota, Minny is reinventing winter wear with our transformable puffer jacket. 
-              Perfect for concerts, bars, and social events—never worry about coat check again.
+              A purse that transforms into a coat—perfect for concerts, bars, and social events. Never worry about coat check again with our innovative winter coat that turns into a purse for going out with storage.
+            </p>
+            <p className="body-md text-muted-foreground mb-8 max-w-xl">
+              Experience the future of convertible outerwear. Our coat that turns into a bag offers the perfect solution for Minnesota winters and social events. This purse with storage for going out turns into a winter coat to keep you warm when you need it most. Whether you're heading to a concert or bar-hopping with friends, our coat purse hybrid provides unmatched convenience and style.
             </p>
             
             {/* Email subscription form */}
