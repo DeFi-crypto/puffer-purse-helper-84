@@ -97,55 +97,46 @@ const Navbar = () => {
           />
           
           {/* Menu content */}
-          <div className="fixed inset-0 z-40 flex items-center justify-center md:hidden pointer-events-none">
-            <div className="w-full max-w-md pointer-events-auto">
-              <div className="flex justify-center mb-8">
-                <img 
-                  src="/lovable-uploads/9575f4c8-b4b8-46cc-9487-939b865fc223.png" 
-                  alt="Minny Logo - Transformable jacket to purse" 
-                  className="h-10"
-                />
-              </div>
-              <nav className="flex flex-col space-y-6 text-lg px-6">
-                <a 
-                  href="#features" 
-                  className="text-primary hover:text-primary/80 transition-colors py-2 border-b border-muted text-center"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Features
-                </a>
-                <a 
-                  href="#use-cases" 
-                  className="text-primary hover:text-primary/80 transition-colors py-2 border-b border-muted text-center"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Use Cases
-                </a>
-                <a 
-                  href="#faq" 
-                  className="text-primary hover:text-primary/80 transition-colors py-2 border-b border-muted text-center"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  FAQ
-                </a>
-                <a 
-                  href="#newsletter" 
-                  className="text-primary hover:text-primary/80 transition-colors py-2 border-b border-muted text-center"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Updates
-                </a>
-                <button 
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    handlePreOrder();
-                  }} 
-                  className="btn-primary text-center mt-4"
-                >
-                  Pre-Order Now
-                </button>
-              </nav>
-            </div>
+          <div className="fixed top-20 left-0 right-0 z-40 md:hidden">
+            <nav className="flex flex-col space-y-4 text-lg px-6 py-8">
+              <a 
+                href="#features" 
+                className="text-primary hover:text-primary/80 transition-colors py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Features
+              </a>
+              <a 
+                href="#use-cases" 
+                className="text-primary hover:text-primary/80 transition-colors py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Use Cases
+              </a>
+              <a 
+                href="#faq" 
+                className="text-primary hover:text-primary/80 transition-colors py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                FAQ
+              </a>
+              <a 
+                href="#newsletter" 
+                className="text-primary hover:text-primary/80 transition-colors py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Updates
+              </a>
+              <button 
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  handlePreOrder();
+                }} 
+                className="btn-primary text-center mt-4"
+              >
+                Pre-Order Now
+              </button>
+            </nav>
           </div>
         </>
       )}
