@@ -98,45 +98,47 @@ const Navbar = () => {
           
           {/* Menu content */}
           <div className="fixed top-20 left-0 right-0 z-40 md:hidden">
-            <nav className="flex flex-col space-y-4 text-lg px-6 py-8">
-              <a 
-                href="#features" 
-                className="text-primary hover:text-primary/80 transition-colors py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Features
-              </a>
-              <a 
-                href="#use-cases" 
-                className="text-primary hover:text-primary/80 transition-colors py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Use Cases
-              </a>
-              <a 
-                href="#faq" 
-                className="text-primary hover:text-primary/80 transition-colors py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                FAQ
-              </a>
-              <a 
-                href="#newsletter" 
-                className="text-primary hover:text-primary/80 transition-colors py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Updates
-              </a>
-              <button 
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  handlePreOrder();
-                }} 
-                className="btn-primary text-center mt-4"
-              >
-                Pre-Order Now
-              </button>
-            </nav>
+            <div className="mx-4 bg-black/90 backdrop-blur-md rounded-lg border border-primary/20 shadow-xl">
+              <nav className="flex flex-col space-y-4 text-lg px-6 py-8">
+                <a 
+                  href="#features" 
+                  className="text-primary hover:text-primary/80 transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Features
+                </a>
+                <a 
+                  href="#use-cases" 
+                  className="text-primary hover:text-primary/80 transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Use Cases
+                </a>
+                <a 
+                  href="#faq" 
+                  className="text-primary hover:text-primary/80 transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  FAQ
+                </a>
+                <a 
+                  href="#newsletter" 
+                  className="text-primary hover:text-primary/80 transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Updates
+                </a>
+                <button 
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    handlePreOrder();
+                  }} 
+                  className="btn-primary text-center mt-4"
+                >
+                  Pre-Order Now
+                </button>
+              </nav>
+            </div>
           </div>
         </>
       )}
