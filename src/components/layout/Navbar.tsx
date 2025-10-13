@@ -23,13 +23,6 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const handlePreOrder = () => {
-    const newsletterSection = document.getElementById('newsletter');
-    if (newsletterSection) {
-      newsletterSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <header
       className={cn(
@@ -71,12 +64,12 @@ const Navbar = () => {
           >
             Updates
           </a>
-          <button 
-            onClick={handlePreOrder} 
+          <a 
+            href="#newsletter" 
             className="btn-primary"
           >
             Pre-Order Now
-          </button>
+          </a>
         </nav>
 
         <button 
@@ -128,15 +121,13 @@ const Navbar = () => {
                 >
                   Updates
                 </a>
-                <button 
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    handlePreOrder();
-                  }} 
+                <a 
+                  href="#newsletter"
+                  onClick={() => setIsMobileMenuOpen(false)}
                   className="btn-primary text-center mt-4"
                 >
                   Pre-Order Now
-                </button>
+                </a>
               </nav>
             </div>
           </div>

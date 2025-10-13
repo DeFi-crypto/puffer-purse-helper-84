@@ -10,14 +10,6 @@ const Hero = () => {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handlePreOrder = () => {
-    // Scroll to newsletter section instead of redirecting
-    const newsletterSection = document.getElementById('newsletter');
-    if (newsletterSection) {
-      newsletterSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -88,13 +80,13 @@ const Hero = () => {
             </form>
             
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
-              <button 
-                onClick={handlePreOrder}
+              <a 
+                href="#newsletter"
                 className="btn-primary flex items-center justify-center"
               >
                 Pre-Order Now
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </button>
+              </a>
               <a href="#features" className="btn-secondary flex items-center justify-center">
                 Learn More
               </a>

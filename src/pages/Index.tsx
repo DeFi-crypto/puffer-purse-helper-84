@@ -7,6 +7,7 @@ import UseCases from '@/components/sections/UseCases';
 import Newsletter from '@/components/sections/Newsletter';
 import FAQ from '@/components/sections/FAQ';
 import Footer from '@/components/sections/Footer';
+import StructuredData from '@/components/SEO/StructuredData';
 
 const Index = () => {
   useEffect(() => {
@@ -39,6 +40,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <StructuredData />
       <Navbar />
       <main>
         <Hero />
