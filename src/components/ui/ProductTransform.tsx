@@ -67,7 +67,7 @@ const ProductTransform = ({ className }: ProductTransformProps) => {
         className="mt-6 btn-primary w-full"
         disabled={isTransforming}
       >
-        {isTransforming ? "Transforming..." : isJacket ? "Transform to Jacket" : "Transform to Purse"}
+        {isTransforming ? "Transforming..." : isJacket ? "Transform to Purse" : "Transform to Jacket"}
       </button>
     </div>
   );
