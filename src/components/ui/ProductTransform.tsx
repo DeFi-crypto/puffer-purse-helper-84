@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 interface ProductTransformProps {
@@ -8,45 +8,34 @@ interface ProductTransformProps {
 
 const ProductTransform = ({ className }: ProductTransformProps) => {
   const [isTransforming, setIsTransforming] = useState(false);
-  const [productState, setProductState] = useState<'jacket' | 'purse'>('jacket');
+  const [shouldPlay, setShouldPlay] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const handleTransform = () => {
     setIsTransforming(true);
+    setShouldPlay(true);
+    
+    // Reset after video duration
     setTimeout(() => {
-      setProductState(prev => prev === 'jacket' ? 'purse' : 'jacket');
       setIsTransforming(false);
-    }, 1500);
+      setShouldPlay(false);
+    }, 8000); // Adjust based on video length
   };
 
   return (
     <div className={cn("relative w-full max-w-lg mx-auto", className)}>
       <div className="relative aspect-square overflow-hidden rounded-xl bg-stone-100">
-        {/* Product images */}
-        <div 
-          className={cn(
-            "w-full h-full transition-opacity duration-500",
-            isTransforming ? "opacity-0" : "opacity-100"
-          )}
-        >
-          <div className="w-full h-full flex items-center justify-center">
-            <img 
-              src="/lovable-uploads/MinnyCoatPurse.png" 
-              alt={productState === 'jacket' ? 'Minny Puffer Jacket transforms into purse' : 'Minny Purse transforms into jacket'}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-        
-        {/* Animation overlay */}
-        <div 
-          className={cn(
-            "absolute inset-0 bg-stone-100 pointer-events-none flex items-center justify-center",
-            isTransforming ? "opacity-100" : "opacity-0"
-          )}
-        >
-          <div className="animate-product-transform w-3/4 h-3/4 bg-gradient-to-r from-secondary/70 to-primary/70 rounded-lg shadow-lg flex items-center justify-center text-white font-medium">
-            Transforming...
-          </div>
+        {/* Canva Video Embed */}
+        <div className="w-full h-full">
+          <iframe 
+            ref={iframeRef}
+            loading="lazy" 
+            className="absolute w-full h-full top-0 left-0 border-0 p-0 m-0"
+            src={`https://www.canva.com/design/DAG14gKiLxA/Wz8Cz6bTasvXLL5q-rcW3w/watch?embed${shouldPlay ? '&autoplay=true' : ''}`}
+            allowFullScreen
+            allow="autoplay; fullscreen"
+            title="Minny jacket transforming into purse"
+          />
         </div>
       </div>
       
@@ -57,11 +46,7 @@ const ProductTransform = ({ className }: ProductTransformProps) => {
         className="mt-6 btn-primary w-full"
         disabled={isTransforming}
       >
-        {isTransforming 
-          ? "Transforming..." 
-          : productState === 'jacket' 
-            ? "Transform to Purse" 
-            : "Transform to Jacket"}
+        {isTransforming ? "Watch the Transformation..." : "Transform to Purse"}
       </button>
     </div>
   );
