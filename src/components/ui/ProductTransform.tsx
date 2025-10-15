@@ -8,18 +8,41 @@ interface ProductTransformProps {
 
 const ProductTransform = ({ className }: ProductTransformProps) => {
   const [isTransforming, setIsTransforming] = useState(false);
+  const [isJacket, setIsJacket] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const animationFrameRef = useRef<number>();
 
   const handleTransform = () => {
-    if (videoRef.current) {
-      setIsTransforming(true);
-      videoRef.current.currentTime = 0; // Reset to start
-      videoRef.current.play();
+    if (!videoRef.current) return;
+    
+    setIsTransforming(true);
+    const video = videoRef.current;
+
+    if (!isJacket) {
+      // Transform to jacket (play forward)
+      video.playbackRate = 1;
+      video.play();
       
-      // Reset state when video ends
-      videoRef.current.onended = () => {
+      video.onended = () => {
         setIsTransforming(false);
+        setIsJacket(true);
       };
+    } else {
+      // Transform to purse (play reverse)
+      const playReverse = () => {
+        if (video.currentTime <= 0) {
+          setIsTransforming(false);
+          setIsJacket(false);
+          if (animationFrameRef.current) {
+            cancelAnimationFrame(animationFrameRef.current);
+          }
+        } else {
+          video.currentTime -= 0.033; // ~30fps
+          animationFrameRef.current = requestAnimationFrame(playReverse);
+        }
+      };
+      
+      animationFrameRef.current = requestAnimationFrame(playReverse);
     }
   };
 
@@ -44,7 +67,7 @@ const ProductTransform = ({ className }: ProductTransformProps) => {
         className="mt-6 btn-primary w-full"
         disabled={isTransforming}
       >
-        {isTransforming ? "Transforming..." : "Transform to Purse"}
+        {isTransforming ? "Transforming..." : isJacket ? "Transform to Purse" : "Transform to Jacket"}
       </button>
     </div>
   );
