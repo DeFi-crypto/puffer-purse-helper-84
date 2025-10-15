@@ -16,12 +16,9 @@ const ProductTransform = ({ className }: ProductTransformProps) => {
       videoRef.current.currentTime = 0; // Reset to start
       videoRef.current.play();
       
-      // Reset state and go back to coat view when video ends
+      // Reset state when video ends
       videoRef.current.onended = () => {
         setIsTransforming(false);
-        if (videoRef.current) {
-          videoRef.current.currentTime = 1; // Show the coat at the beginning
-        }
       };
     }
   };
