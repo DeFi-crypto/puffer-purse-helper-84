@@ -1,5 +1,5 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 interface ProductTransformProps {
@@ -11,6 +11,12 @@ const ProductTransform = ({ className }: ProductTransformProps) => {
   const [isJacket, setIsJacket] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const animationFrameRef = useRef<number>();
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0.01;
+    }
+  }, []);
 
   const handleTransform = () => {
     if (!videoRef.current) return;
