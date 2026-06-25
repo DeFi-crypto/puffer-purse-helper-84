@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -64,12 +65,9 @@ const Navbar = () => {
           >
             Updates
           </a>
-          <a 
-            href="#newsletter" 
-            className="btn-primary"
-          >
+          <Link to="/pre-order" className="btn-primary">
             Pre-Order Now
-          </a>
+          </Link>
         </nav>
 
         <button 
@@ -121,13 +119,9 @@ const Navbar = () => {
                 >
                   Updates
                 </a>
-                <a 
-                  href="#newsletter"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="btn-primary text-center mt-4"
-                >
+                <Link to="/pre-order" onClick={() => setIsMobileMenuOpen(false)} className="btn-primary text-center mt-4">
                   Pre-Order Now
-                </a>
+                </Link>
               </nav>
             </div>
           </div>
@@ -138,3 +132,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
