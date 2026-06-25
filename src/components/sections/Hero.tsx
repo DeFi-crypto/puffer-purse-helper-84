@@ -1,5 +1,6 @@
-
+﻿
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
@@ -53,7 +54,7 @@ const Hero = () => {
               The Purse That <span className="text-primary">Transforms</span> Into a Jacket
             </h1>
             <p className="body-lg text-muted-foreground mb-8 max-w-xl">
-              From the University of Minnesota, Minny is reinventing winter wear with our transformable puffer jacket. A purse that transforms into a coat—perfect for concerts, bars, and social events.
+              From the University of Minnesota, Minny is reinventing winter wear with our transformable puffer jacket. A purse that transforms into a coatâ€”perfect for concerts, bars, and social events.
             </p>
             
             {/* Email subscription form */}
@@ -80,13 +81,10 @@ const Hero = () => {
             </form>
             
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
-              <a 
-                href="#newsletter"
-                className="btn-primary flex items-center justify-center"
-              >
+              <Link to="/pre-order" className="btn-primary flex items-center justify-center">
                 Pre-Order Now
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </a>
+              </Link>
               <a href="#features" className="btn-secondary flex items-center justify-center">
                 Learn More
               </a>
@@ -116,3 +114,4 @@ const Hero = () => {
 };
 
 export default Hero;
+
