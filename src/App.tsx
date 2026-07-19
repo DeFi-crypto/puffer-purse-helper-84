@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import PreOrder from "./pages/PreOrder";
 import PreOrderSuccess from "./pages/PreOrderSuccess";
 import NotFound from "./pages/NotFound";
+import Unsubscribe from "./pages/Unsubscribe";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/pre-order" element={<PreOrder />} />
           <Route path="/pre-order/success" element={<PreOrderSuccess />} />
+          <Route path="/unsubscribe" element={<Unsubscribe />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
