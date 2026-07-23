@@ -11,28 +11,28 @@ import AnimatedSection from '../ui/AnimatedSection';
 const FAQ = () => {
   const faqItems = [
     {
-      question: "How does the jacket transform into a purse?",
-      answer: "Our innovative design features a specialized folding system that allows the jacket to collapse into a compact purse form in under 30 seconds. The outer shell becomes the purse exterior, while the inner lining creates secure storage space for your essentials."
+      question: "How does it transform?",
+      answer: "A folding system tucks the down into the shell — the shell becomes the purse and the lining becomes the storage. Under 30 seconds, no practice needed."
     },
     {
-      question: "Is the jacket warm enough for Minnesota winters?",
-      answer: "Yes! As a University of Minnesota startup, we designed our jacket specifically for harsh winter conditions. The puffer design provides excellent insulation while remaining lightweight and comfortable. Perfect for winter weather while being stylish enough for social events."
+      question: "Is it warm enough for Minnesota winters?",
+      answer: "Yes. It's a real puffer, designed in Minneapolis for the walk there and back."
     },
     {
-      question: "What can I fit in the purse when transformed?",
-      answer: "The transformed purse has enough room for essentials like your phone, wallet, keys, makeup.  The convertible outerwear is designed to hold everything you'd need for a night out while keeping your hands free."
+      question: "What fits in the purse?",
+      answer: "Phone, wallet, keys, makeup — everything you'd take out, zipped and secure."
     },
     {
-      question: "Can I wash the jacket?",
-      answer: "Yes, our transforming winter jacket is machine washable on a gentle cycle with cold water. We recommend air drying to maintain the integrity of the materials and transformation mechanism."
+      question: "Can I wash it?",
+      answer: "Machine wash on gentle with cold water, then air dry."
     },
     {
-      question: "Can I buy the transformative coat right now?",
-      answer: "We're currently accepting pre-orders for our first production run. Orders are expected to ship within when we launch. You'll receive tracking information as soon as your coat purse hybrid ships."
+      question: "Can I buy one right now?",
+      answer: "We're taking pre-orders for the first production run — pre-ordering locks your spot."
     },
     {
-      question: "Do you offer international shipping?",
-      answer: "Currently, we ship within the United States. We plan to expand our shipping options internationally in the near future as our University of Minnesota startup grows."
+      question: "Do you ship internationally?",
+      answer: "US only for now. International is coming as we grow."
     }
   ];
 
@@ -45,8 +45,8 @@ const FAQ = () => {
       <div className="container-custom max-w-4xl relative z-10">
         <AnimatedSection>
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <div className="tag inline-block mb-4">Questions & Answers</div>
-            <h2 className="heading-lg mb-6 text-foreground">Frequently Asked Questions</h2>
+            <div className="tag inline-block mb-4">Questions</div>
+            <h2 className="font-display text-4xl sm:text-5xl mb-6 text-foreground">Fair questions</h2>
             <p className="body-md text-muted-foreground max-w-2xl mx-auto">
               Get answers to common questions about our convertible coat to bag design, 
               shipping, and product features. Our coat that turns into a bag is revolutionizing winter wear.

@@ -1,111 +1,87 @@
-﻿
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Send } from 'lucide-react';
-import { toast } from 'sonner';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { supabase } from '@/integrations/supabase/client';
+import { ArrowRight, ArrowDown } from 'lucide-react';
 
-const Hero = () => {
-  const [email, setEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const WORDS = ['warm', 'secure', 'comfortable'];
 
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!email) {
-      toast.error('Please enter a valid email address');
-      return;
-    }
+const RotatingWord = () => {
+  const [i, setI] = useState(0);
+  const [w, setW] = useState<number | undefined>(undefined);
+  const measureRef = useRef<HTMLSpanElement>(null);
 
-    try {
-      setIsSubmitting(true);
-      
-      const { data, error } = await supabase.functions.invoke('subscribe', {
-        body: { email }
-      });
-      
-      if (error) {
-        throw new Error(error.message || 'Failed to subscribe');
-      }
-      
-      setEmail('');
-      toast.success(data?.message || 'Successfully subscribed!');
-    } catch (error) {
-      console.error('Subscription error:', error);
-      toast.error(error.message || 'Failed to subscribe. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  useEffect(() => {
+    const t = setInterval(() => setI((p) => (p + 1) % WORDS.length), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
+    if (measureRef.current) setW(measureRef.current.offsetWidth);
+  }, [i]);
 
   return (
-    <section className="min-h-screen pt-24 pb-12 flex items-center relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary/20 rounded-full opacity-30 blur-3xl animate-float"></div>
-      <div className="absolute top-1/3 -left-20 w-80 h-80 bg-secondary/20 rounded-full opacity-30 blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
-      
-      <div className="container-custom relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div className="order-2 lg:order-1 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-            <div className="tag mb-4 animate-pulse-subtle">Introducing</div>
-            <h1 className="heading-xl mb-6">
-              The Purse That <span className="text-primary">Transforms</span> Into a Jacket
-            </h1>
-            <p className="body-lg text-muted-foreground mb-8 max-w-xl">
-              From the University of Minnesota, Minny is reinventing winter wear with our transformable puffer jacket. A purse that transforms into a coatâ€”perfect for concerts, bars, and social events.
-            </p>
-            
-            {/* Email subscription form */}
-            <form onSubmit={handleSubscribe} className="mb-8">
-              <div className="relative max-w-xl">
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email for updates"
-                  required
-                  className="pr-14 h-12 bg-black/60 border-white/10 focus:border-primary transition-all duration-300 text-foreground"
-                  disabled={isSubmitting}
-                />
-                <Button 
-                  type="submit" 
-                  size="icon"
-                  className="absolute right-1 top-1 bg-primary hover:bg-primary/80 text-black h-10 w-10 rounded-md flex items-center justify-center"
-                  disabled={isSubmitting}
-                >
-                  <Send className="h-5 w-5" />
-                </Button>
-              </div>
-            </form>
-            
-            <div className="flex flex-col sm:flex-row gap-4 mt-8">
-              <Link to="/pre-order" className="btn-primary flex items-center justify-center">
-                Pre-Order Now
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <a href="#features" className="btn-secondary flex items-center justify-center">
-                Learn More
-              </a>
-            </div>
+    <span
+      className="relative inline-block align-baseline text-left"
+      style={{ width: w, transition: 'width .25s cubic-bezier(.4,0,.2,1)', whiteSpace: 'nowrap' }}
+    >
+      <span key={i} className="animate-word-in inline-block">{WORDS[i]}</span>
+      {/* invisible measurer */}
+      <span ref={measureRef} className="absolute left-0 top-0 invisible" aria-hidden="true">{WORDS[i]}</span>
+    </span>
+  );
+};
+
+const Hero = () => {
+  return (
+    <section className="relative min-h-screen flex items-end overflow-hidden bg-black">
+      {/* Background frame from the night-out video */}
+      <div className="absolute inset-0">
+        <img
+          src="/media/hero-frame.jpg"
+          alt=""
+          aria-hidden="true"
+          className="w-full h-full object-cover object-center scale-110 blur-[6px] brightness-[0.55]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/85" />
+      </div>
+
+      <div className="container-custom relative z-10 pb-16 pt-36 md:pb-20">
+        <div className="max-w-3xl animate-fade-up">
+          <div className="inline-flex items-center gap-2 rounded-full bg-black/60 backdrop-blur px-4 py-2 text-sm text-white/85 border border-white/10 mb-6">
+            Made by cold college students
+            <span className="text-white/40">—</span>
+            <span className="text-primary font-medium">Patent Pending</span>
           </div>
-          
-          <div className="order-1 lg:order-2 max-w-md mx-auto lg:max-w-none animate-fade-in" style={{ animationDelay: '0.6s' }}>
-            <div className="relative">
-              {/* Product image */}
-              <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100 shadow-lg">
-                <img 
-                  src="/lovable-uploads/MinnyCoatPurse.png" 
-                  alt="Minny transformable jacket and purse - coat that turns into a bag" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              
-              {/* Accent elements */}
-              <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-lg bg-secondary opacity-70"></div>
-              <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full bg-primary opacity-70"></div>
-            </div>
+
+          <h1 className="font-display text-white leading-[1.04] text-[2.6rem] sm:text-6xl lg:text-7xl mb-6">
+            Stay <RotatingWord /> on the way.
+            <br />
+            Stay <span className="text-primary">cute</span> all night.
+          </h1>
+
+          <p className="text-white/80 text-lg md:text-xl max-w-xl mb-9">
+            Minny is a purse that unfolds into a real puffer jacket. Wear it there,
+            clip it up inside — no coat check, nothing left behind.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link
+              to="/pre-order"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary text-black font-semibold px-8 h-14 text-base hover:bg-primary/90 transition-colors shadow-[0_0_28px_rgba(51,242,160,0.35)]"
+            >
+              Pre-Order Now
+              <ArrowRight className="h-5 w-5" />
+            </Link>
+            <a
+              href="#how-it-works"
+              className="inline-flex items-center justify-center rounded-full border border-primary/60 text-primary px-8 h-14 text-base hover:bg-primary/10 transition-colors"
+            >
+              See How It Works
+            </a>
+          </div>
+
+          <div className="mt-14 flex items-center gap-3 text-white/50 text-xs tracking-[0.18em] uppercase">
+            <ArrowDown className="h-4 w-4" />
+            Scroll — the purse does a trick
           </div>
         </div>
       </div>
@@ -114,4 +90,3 @@ const Hero = () => {
 };
 
 export default Hero;
-

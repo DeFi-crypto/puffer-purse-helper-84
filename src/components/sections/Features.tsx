@@ -1,99 +1,77 @@
-
 import React from 'react';
-import { ArrowDownRight, Sparkles, Leaf, Clock } from 'lucide-react';
 import AnimatedSection from '../ui/AnimatedSection';
-import ProductTransform from '../ui/ProductTransform';
+
+const ITEMS = [
+  {
+    n: '01',
+    t: 'Real Minnesota warmth',
+    d: 'A true puffer, not a gimmick — built for the walk from Dinkytown in January.',
+  },
+  {
+    n: '02',
+    t: 'Fits your essentials',
+    d: 'Phone, wallet, keys, lip gloss — zipped up and on your shoulder.',
+  },
+  {
+    n: '03',
+    t: 'Nothing to lose',
+    d: 'No coat check line, no jacket forgotten at the bar, no cover fee for warmth.',
+  },
+];
 
 const Features = () => {
   return (
-    <section id="features" className="section-padding bg-background relative overflow-hidden">
-      {/* Background accents - removed */}
-      
-      <div className="container-custom relative z-10">
+    <section id="features" className="relative overflow-hidden bg-[#EDEDE7] text-[#0a0a0a]">
+      <div className="container-custom py-20 md:py-28">
         <AnimatedSection>
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="tag inline-block mb-4">Revolutionary Design</div>
-            <h2 className="heading-lg mb-6 text-foreground">One Product, Two Functions</h2>
-            <p className="body-md text-muted-foreground max-w-2xl mx-auto mb-4">
-              Our innovative design allows you to transform your winter puffer jacket into a 
-              stylish leather purse in seconds. This purse that changes into a winter coat represents the perfect blend of functionality and fashion for the modern lifestyle.
-            </p>
-            <p className="body-md text-muted-foreground max-w-2xl mx-auto">
-              Designed by University of Minnesota students who understand harsh winters and active social lives, our transforming winter jacket solves the age-old problem of what to do with your bulky coat at concerts, bars, and events. The convertible outerwear instantly becomes a compact purse with storage, keeping your essentials secure while you enjoy your night out. When it's time to leave, transform it back into a warm winter coat in seconds.
-            </p>
-          </div>
+          <h2 className="font-display text-4xl sm:text-5xl mb-3">Made for the whole night</h2>
+          <p className="text-[#4a4a4a] text-lg mb-14">The walk there, the hours inside, and the walk home.</p>
         </AnimatedSection>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
-          <AnimatedSection direction="left" className="order-2 lg:order-1">
-            <div className="space-y-8">
-              <div className="glass-panel p-6 border border-primary/30 hover:border-primary/50 transition-all duration-300">
-                <div className="flex items-start">
-                  <div className="bg-black text-primary p-3 rounded-xl mr-4 neon-box">
-                    <Sparkles size={20} />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2 text-foreground">Seamless Transformation</h3>
-                    <p className="text-muted-foreground">
-                      Transform your jacket into a purse in under 30 seconds with our 
-                      intuitive design. No complex folding or extra steps required.
-                    </p>
-                  </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-12">
+            {ITEMS.map((it, i) => (
+              <AnimatedSection key={it.n} delay={i * 100}>
+                <div>
+                  <div className="font-display text-4xl text-[#22cf87] mb-3">{it.n}</div>
+                  <h3 className="text-xl font-semibold mb-2">{it.t}</h3>
+                  <p className="text-[#4a4a4a]">{it.d}</p>
+                </div>
+              </AnimatedSection>
+            ))}
+            <AnimatedSection delay={300}>
+              <div className="flex flex-col justify-end gap-4 h-full">
+                <div className="rounded-2xl bg-[#0a0a0a] text-center py-6 px-4">
+                  <div className="font-display text-3xl text-primary mb-1">30s</div>
+                  <div className="text-white/60 text-sm">Transform Time</div>
+                </div>
+                <div className="rounded-2xl bg-[#0a0a0a] text-center py-6 px-4">
+                  <div className="font-display text-3xl text-[#ff5d9e] mb-1">100%</div>
+                  <div className="text-white/60 text-sm">Convenience</div>
                 </div>
               </div>
-              
-              <div className="glass-panel p-6 border border-secondary/30 hover:border-secondary/50 transition-all duration-300">
-                <div className="flex items-start">
-                  <div className="bg-black text-secondary p-3 rounded-xl mr-4 neon-box">
-                    <Leaf size={20} />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2 text-foreground">Premium Materials</h3>
-                    <p className="text-muted-foreground">
-                      Crafted with sustainable, high-quality materials that provide warmth 
-                      when worn as a jacket and elegance when carried as a purse.
-                    </p>
-                  </div>
-                </div>
+            </AnimatedSection>
+          </div>
+
+          <AnimatedSection direction="right">
+            <div className="relative max-w-sm mx-auto">
+              <div className="rounded-3xl overflow-hidden bg-black shadow-2xl aspect-[9/16]">
+                <video
+                  src="/media/transform.mp4"
+                  poster="/media/transform-poster.jpg"
+                  muted
+                  loop
+                  autoPlay
+                  playsInline
+                  preload="metadata"
+                  className="w-full h-full object-cover"
+                />
               </div>
-              
-              <div className="glass-panel p-6 border border-accent/30 hover:border-accent/50 transition-all duration-300">
-                <div className="flex items-start">
-                  <div className="bg-black text-accent p-3 rounded-xl mr-4 neon-box">
-                    <Clock size={20} />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2 text-foreground">All-Night Convenience</h3>
-                    <p className="text-muted-foreground">
-                      Never worry about coat check again. Keep your essentials secure and 
-                      your hands free while staying warm to and from venues.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <div className="absolute -top-5 -left-5 w-12 h-12 rounded-full bg-primary opacity-90" />
+              <div className="absolute -bottom-5 -right-5 w-14 h-14 rounded-2xl bg-secondary opacity-80" />
             </div>
-          </AnimatedSection>
-          
-          <AnimatedSection direction="right" className="order-1 lg:order-2">
-            <ProductTransform />
           </AnimatedSection>
         </div>
-        
-        <AnimatedSection>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="text-center p-8 glass-panel border border-white/10 hover:border-white/20 transition-all duration-300">
-              <div className="text-4xl font-bold text-primary mb-2">30s</div>
-              <p className="text-muted-foreground">Transform Time</p>
-            </div>
-            
-            {/* Removed the "5+ Color Options" square */}
-            
-            <div className="text-center p-8 glass-panel border border-white/10 hover:border-white/20 transition-all duration-300">
-              <div className="text-4xl font-bold text-accent mb-2">100%</div>
-              <p className="text-muted-foreground">Convenience</p>
-            </div>
-          </div>
-        </AnimatedSection>
       </div>
     </section>
   );
