@@ -41,6 +41,7 @@ const Navbar = () => {
         </a>
 
         <nav className="hidden md:flex space-x-8 items-center">
+          <a href="#how-it-works" className="text-primary hover:text-primary/80 transition-colors">How It Works</a>
           <a 
             href="#features" 
             className="text-primary hover:text-primary/80 transition-colors"
@@ -51,7 +52,7 @@ const Navbar = () => {
             href="#use-cases" 
             className="text-primary hover:text-primary/80 transition-colors"
           >
-            Use Cases
+            Nights Out
           </a>
           <a 
             href="#faq" 
