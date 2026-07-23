@@ -1,38 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 
-const WORDS = ['warm', 'secure', 'comfortable'];
-
-const RotatingWord = () => {
-  const [i, setI] = useState(0);
-  const [w, setW] = useState<number | undefined>(undefined);
-  const measureRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    const t = setInterval(() => setI((p) => (p + 1) % WORDS.length), 1000);
-    return () => clearInterval(t);
-  }, []);
-
-  useEffect(() => {
-    if (measureRef.current) setW(measureRef.current.offsetWidth);
-  }, [i]);
-
-  return (
-    <span
-      className="relative inline-block align-baseline text-left"
-      style={{ width: w, transition: 'width .25s cubic-bezier(.4,0,.2,1)', whiteSpace: 'nowrap' }}
-    >
-      <span key={i} className="animate-word-in inline-block">{WORDS[i]}</span>
-      {/* invisible measurer */}
-      <span ref={measureRef} className="absolute left-0 top-0 invisible" aria-hidden="true">{WORDS[i]}</span>
-    </span>
-  );
-};
-
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-end overflow-hidden bg-black">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-black">
       {/* Background frame from the night-out video */}
       <div className="absolute inset-0">
         <img
@@ -44,7 +16,7 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/85" />
       </div>
 
-      <div className="container-custom relative z-10 pb-16 pt-36 md:pb-20">
+      <div className="container-custom relative z-10 py-28 md:py-32">
         <div className="max-w-3xl animate-fade-up">
           <div className="inline-flex items-center gap-2 rounded-full bg-black/60 backdrop-blur px-4 py-2 text-sm text-white/85 border border-white/10 mb-6">
             Made by cold college students
@@ -53,7 +25,7 @@ const Hero = () => {
           </div>
 
           <h1 className="font-display text-white leading-[1.04] text-[2.6rem] sm:text-6xl lg:text-7xl mb-6">
-            Stay <RotatingWord /> on the way.
+            Stay warm on the way.
             <br />
             Stay <span className="text-primary">cute</span> all night.
           </h1>

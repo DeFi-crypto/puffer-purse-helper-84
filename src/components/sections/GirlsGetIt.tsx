@@ -22,27 +22,21 @@ const CARDS = [
     poster: '/media/girls-1-poster.jpg',
     handle: '@minnyapparel',
     caption: 'coat check could never',
-    likes: '48.2k',
     order: 'order-2 sm:order-1',
-    tilt: 'sm:-rotate-2',
   },
   {
     src: '/media/girls-2.mp4',
     poster: '/media/girls-2-poster.jpg',
     handle: '@gophergirl.em',
     caption: 'wait for the flip',
-    likes: '112.6k',
     order: 'order-1 sm:order-2',
-    tilt: 'sm:rotate-1 sm:translate-y-3',
   },
   {
     src: '/media/girls-3.mp4',
     poster: '/media/girls-3-poster.jpg',
     handle: '@mads.mpls',
     caption: '12 degrees and unbothered',
-    likes: '23.4k',
     order: 'order-3 sm:order-3',
-    tilt: 'sm:-rotate-1',
   },
 ];
 
@@ -98,7 +92,7 @@ const GirlsGetIt = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6 lg:gap-10 mt-12 max-w-5xl mx-auto">
           {CARDS.map((c, i) => (
             <AnimatedSection key={c.handle} delay={i * 120} className={c.order}>
-              <div className={`relative rounded-[28px] overflow-hidden bg-black border border-white/10 shadow-2xl aspect-[9/16] max-w-[320px] mx-auto transition-transform duration-300 ${c.tilt}`}>
+              <div className={`relative rounded-[28px] overflow-hidden bg-black border border-white/10 shadow-2xl aspect-[9/16] max-w-[320px] mx-auto`}>
                 <video
                   ref={(el) => { refs.current[i] = el; }}
                   src={c.src}
@@ -122,7 +116,6 @@ const GirlsGetIt = () => {
                 <div className="absolute bottom-0 inset-x-0 p-4 text-left">
                   <div className="text-white font-semibold">{c.handle}</div>
                   <div className="text-white/75 text-sm">{c.caption}</div>
-                  <div className="text-white/50 text-xs mt-1">♥ {c.likes}</div>
                 </div>
               </div>
             </AnimatedSection>
