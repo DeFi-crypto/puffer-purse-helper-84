@@ -27,14 +27,14 @@ const CARDS = [
   {
     src: '/media/girls-2.mp4',
     poster: '/media/girls-2-poster.jpg',
-    handle: '@gophergirl.em',
+    handle: '@minnyapparel',
     caption: 'wait for the flip',
     order: 'order-1 sm:order-2',
   },
   {
-    src: '/media/girls-3.mp4',
-    poster: '/media/girls-3-poster.jpg',
-    handle: '@mads.mpls',
+    src: '/media/girls-3.mp4?v=2',
+    poster: '/media/girls-3-poster.jpg?v=2',
+    handle: '@minnyapparel',
     caption: '12 degrees and unbothered',
     order: 'order-3 sm:order-3',
   },
@@ -91,7 +91,7 @@ const GirlsGetIt = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6 lg:gap-10 mt-12 max-w-5xl mx-auto">
           {CARDS.map((c, i) => (
-            <AnimatedSection key={c.handle} delay={i * 120} className={c.order}>
+            <AnimatedSection key={c.src} delay={i * 120} className={c.order}>
               <div className={`relative rounded-[28px] overflow-hidden bg-black border border-white/10 shadow-2xl aspect-[9/16] max-w-[320px] mx-auto`}>
                 <video
                   ref={(el) => { refs.current[i] = el; }}
