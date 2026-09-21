@@ -16,17 +16,12 @@ const perks = [
 
 const PreOrder = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [agreed, setAgreed] = useState(false);
 
   useEffect(() => {
     document.title = 'Pre-Order Minny — $179.99';
   }, []);
 
   const handleCheckout = async () => {
-    if (!agreed) {
-      toast.error('Please accept the pre-order terms to continue.');
-      return;
-    }
     try {
       setIsLoading(true);
       const { data, error } = await supabase.functions.invoke('create-checkout', {
@@ -70,26 +65,9 @@ const PreOrder = () => {
               <span className="text-sm sm:text-base text-muted-foreground">one-time · pre-order price</span>
             </div>
 
-            <label className="flex items-start gap-3 mb-4 cursor-pointer select-none rounded-xl border border-white/10 bg-black/30 p-3 sm:p-4">
-              <input
-                type="checkbox"
-                checked={agreed}
-                onChange={(e) => setAgreed(e.target.checked)}
-                className="mt-0.5 h-5 w-5 shrink-0 accent-[#33f2a0]"
-              />
-              <span className="text-sm text-foreground/90">
-                I understand this is a <strong>pre-order</strong> for a product still in production.
-                Minny has no fixed ship date and no time obligation to deliver by a specific date;
-                my order ships when production is complete. I agree to the{' '}
-                <Link to="/terms" target="_blank" className="text-primary underline">
-                  pre-order terms
-                </Link>.
-              </span>
-            </label>
-
             <Button
               onClick={handleCheckout}
-              disabled={isLoading || !agreed}
+              disabled={isLoading}
               className="btn-primary w-full h-12 flex items-center justify-center text-base disabled:opacity-50"
             >
               {isLoading ? (
@@ -104,6 +82,13 @@ const PreOrder = () => {
                 </>
               )}
             </Button>
+
+            <p className="mt-3 text-center text-xs sm:text-sm text-muted-foreground">
+              By clicking Pre-Order, you agree to our{' '}
+              <Link to="/terms" className="text-primary underline underline-offset-2 hover:text-primary/80">
+                Terms &amp; Conditions
+              </Link>.
+            </p>
 
             <div className="mt-3 sm:mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[11px] sm:text-xs text-muted-foreground">
               <span className="inline-flex items-center gap-1.5">

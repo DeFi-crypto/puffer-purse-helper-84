@@ -112,8 +112,8 @@ const Hero = () => {
                 <span className="text-primary font-medium">Patent Pending</span>
               </div>
 
-              <h1 className="font-display text-white leading-[1.06] text-[1.9rem] sm:text-5xl xl:text-6xl mb-2.5 sm:mb-4">
-                Stay warm on the way.
+              <h1 className="font-display text-white leading-[1.06] text-[1.9rem] sm:text-4xl xl:text-5xl mb-2.5 sm:mb-4">
+                <span className="block xl:whitespace-nowrap">Stay warm on the way.</span>
                 <br />
                 Stay <span className="text-primary">cute</span> all night.
               </h1>
