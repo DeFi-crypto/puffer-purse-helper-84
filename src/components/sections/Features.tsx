@@ -5,7 +5,7 @@ const ITEMS = [
   {
     n: '01',
     t: 'Real Minnesota warmth',
-    d: '700-fill puffer insulation and a wind-blocking shell — built for the walk from Dinkytown in January, not a fashion-only layer.',
+    d: 'Premium down-and-feather insulation and a wind-blocking shell — built for the walk from Dinkytown in January, not a fashion-only layer.',
   },
   {
     n: '02',
@@ -46,8 +46,8 @@ const Features = () => {
                   <div className="text-white/60 text-xs sm:text-sm">Transform Time</div>
                 </div>
                 <div className="rounded-2xl bg-[#0a0a0a] text-center py-4 px-3">
-                  <div className="font-display text-2xl sm:text-3xl text-[#ff5d9e] mb-0.5">700</div>
-                  <div className="text-white/60 text-xs sm:text-sm">Fill Power</div>
+                  <div className="font-display text-xl sm:text-2xl text-[#ff5d9e] mb-0.5">Premium</div>
+                  <div className="text-white/60 text-xs sm:text-sm">Down &amp; Feather</div>
                 </div>
               </div>
             </AnimatedSection>

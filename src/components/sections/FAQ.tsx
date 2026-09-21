@@ -15,7 +15,7 @@ const FAQ = () => {
     },
     {
       question: "Is it warm enough for Minnesota winters?",
-      answer: "Yes. It's a real 700-fill puffer, designed in Minneapolis for the walk there and back."
+      answer: "Yes. It's a real down-and-feather puffer, designed in Minneapolis for the walk there and back."
     },
     {
       question: "What fits in the purse?",

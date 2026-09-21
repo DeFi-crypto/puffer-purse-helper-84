@@ -11,9 +11,6 @@ const PRODUCT_NAME = 'Minny — Convertible Puffer Purse (Pre-Order)';
 const PRODUCT_DESC =
   'Pre-order from our first production run. Ships when production is complete — no fixed ship date. ' +
   'Full terms: https://minnyapparel.com/terms';
-const TERMS_MSG =
-  'I understand this is a pre-order with no fixed ship date and no time obligation to deliver by a ' +
-  'particular date; my order ships when production is complete. I agree to the [pre-order terms](https://minnyapparel.com/terms).';
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -70,18 +67,7 @@ serve(async (req) => {
     base.set('custom_text[submit][message]',
       'Pre-order: ships when production is complete. No fixed ship date.');
 
-    // First try with Stripe's own terms-of-service checkbox. This requires a Terms of
-    // Service URL to be set in the Stripe Dashboard (Settings → Public details); if it
-    // isn't, Stripe rejects the request and we fall back to a session without it.
-    const withTos = new URLSearchParams(base);
-    withTos.set('consent_collection[terms_of_service]', 'required');
-    withTos.set('custom_text[terms_of_service_acceptance][message]', TERMS_MSG);
-
-    let result = await createSession(stripeKey, withTos);
-    if (!result.ok) {
-      console.warn('Checkout with consent_collection failed, retrying without:', result.data?.error?.message);
-      result = await createSession(stripeKey, base);
-    }
+    const result = await createSession(stripeKey, base);
 
     if (!result.ok) {
       console.error('Stripe error:', result.data);

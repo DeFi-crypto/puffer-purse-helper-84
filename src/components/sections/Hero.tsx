@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
+import { useCheckout } from '@/hooks/use-checkout';
 
 const STEPS = ['Unclip', 'Unfold', 'Zip up'];
 
 const CHECKS = [
-  { h: '700+ fill-power down', s: 'a real winter puffer, not a shell' },
+  { h: 'Premium down & feather insulation', s: 'a real winter puffer, not a shell' },
   { h: 'Purse to puffer in 30 seconds', s: 'no practice, no instructions' },
   { h: 'Skip the coat check', s: 'nothing left at the bar, no line, no fee' },
 ];
@@ -21,6 +22,7 @@ const Hero = () => {
   const wrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [frac, setFrac] = useState(0);
+  const { isCheckingOut, startCheckout } = useCheckout();
 
   useEffect(() => {
     const video = videoRef.current;
@@ -114,7 +116,6 @@ const Hero = () => {
 
               <h1 className="font-display text-white leading-[1.06] text-[1.9rem] sm:text-4xl xl:text-5xl mb-2.5 sm:mb-4">
                 <span className="block xl:whitespace-nowrap">Stay warm on the way.</span>
-                <br />
                 Stay <span className="text-primary">cute</span> all night.
               </h1>
 
@@ -138,13 +139,15 @@ const Hero = () => {
               </ul>
 
               <div className="flex flex-row flex-wrap gap-3">
-                <Link
-                  to="/pre-order"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-primary text-black font-semibold px-6 sm:px-8 h-11 sm:h-14 text-[15px] sm:text-base hover:bg-primary/90 transition-colors shadow-[0_0_28px_rgba(51,242,160,0.35)]"
+                <button
+                  type="button"
+                  onClick={startCheckout}
+                  disabled={isCheckingOut}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-primary text-black font-semibold px-6 sm:px-8 h-11 sm:h-14 text-[15px] sm:text-base hover:bg-primary/90 transition-colors shadow-[0_0_28px_rgba(51,242,160,0.35)] disabled:cursor-wait disabled:opacity-70"
                 >
-                  Pre-Order — $179.99
-                  <ArrowRight className="h-5 w-5" />
-                </Link>
+                  {isCheckingOut ? 'Opening secure checkout…' : 'Pre-Order — $179.99'}
+                  {!isCheckingOut && <ArrowRight className="h-5 w-5" />}
+                </button>
                 <a
                   href="#features"
                   className="inline-flex items-center justify-center rounded-full border border-primary/60 text-primary px-6 sm:px-8 h-11 sm:h-14 text-[15px] sm:text-base hover:bg-primary/10 transition-colors"
@@ -152,9 +155,13 @@ const Hero = () => {
                   Why it's warm
                 </a>
               </div>
-              <div className="mt-3 text-[12px] sm:text-[13px] text-white/55">
-                Free US shipping · Full refund any time before it ships · Secure checkout by Stripe
-              </div>
+              <p className="mt-3 text-[12px] sm:text-[13px] text-white/55">
+                By clicking Pre-Order, you agree to our{' '}
+                <Link to="/terms" className="text-primary underline underline-offset-2 hover:text-primary/80">
+                  Terms &amp; Conditions
+                </Link>.
+                <span className="hidden sm:inline"> Free US shipping · Full refund any time before it ships · Secure checkout by Stripe</span>
+              </p>
             </div>
 
             {/* ---------- Scroll-scrubbed product video ---------- */}

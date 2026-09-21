@@ -1,41 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Check, Loader2, ShieldCheck, Lock } from 'lucide-react';
-import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { supabase } from '@/integrations/supabase/client';
+import { useCheckout } from '@/hooks/use-checkout';
 
 const PRICE = '$179.99';
 
 const perks = [
-  'A real 700-fill puffer that folds into a purse in 30 seconds',
+  'A real down-and-feather puffer that folds into a purse in 30 seconds',
   'First production run — pre-orders ship before anyone else can buy',
   'Locked-in pre-order price; retail will be higher',
   'Email updates as your order moves through production',
 ];
 
 const PreOrder = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { isCheckingOut, startCheckout } = useCheckout();
 
   useEffect(() => {
     document.title = 'Pre-Order Minny — $179.99';
   }, []);
-
-  const handleCheckout = async () => {
-    try {
-      setIsLoading(true);
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { accepted_terms: true },
-      });
-      if (error) throw new Error(error.message || 'Failed to start checkout');
-      if (!data?.url) throw new Error('No checkout URL returned');
-      window.location.href = data.url;
-    } catch (error) {
-      console.error('Checkout error:', error);
-      toast.error(error.message || 'Something went wrong. Please try again.');
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-[100svh] flex flex-col bg-background relative overflow-hidden">
@@ -66,11 +49,11 @@ const PreOrder = () => {
             </div>
 
             <Button
-              onClick={handleCheckout}
-              disabled={isLoading}
+              onClick={startCheckout}
+              disabled={isCheckingOut}
               className="btn-primary w-full h-12 flex items-center justify-center text-base disabled:opacity-50"
             >
-              {isLoading ? (
+              {isCheckingOut ? (
                 <>
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                   Redirecting to secure checkout…

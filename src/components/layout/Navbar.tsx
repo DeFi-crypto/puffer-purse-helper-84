@@ -1,11 +1,12 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useCheckout } from '@/hooks/use-checkout';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isCheckingOut, startCheckout } = useCheckout();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,9 +67,9 @@ const Navbar = () => {
           >
             Updates
           </a>
-          <Link to="/pre-order" className="btn-primary">
-            Pre-Order Now
-          </Link>
+          <button type="button" onClick={startCheckout} disabled={isCheckingOut} className="btn-primary disabled:cursor-wait disabled:opacity-70">
+            {isCheckingOut ? 'Opening checkout…' : 'Pre-Order Now'}
+          </button>
         </nav>
 
         <button 
@@ -120,9 +121,14 @@ const Navbar = () => {
                 >
                   Updates
                 </a>
-                <Link to="/pre-order" onClick={() => setIsMobileMenuOpen(false)} className="btn-primary text-center mt-4">
-                  Pre-Order Now
-                </Link>
+                <button
+                  type="button"
+                  onClick={() => { setIsMobileMenuOpen(false); startCheckout(); }}
+                  disabled={isCheckingOut}
+                  className="btn-primary text-center mt-4 disabled:cursor-wait disabled:opacity-70"
+                >
+                  {isCheckingOut ? 'Opening checkout…' : 'Pre-Order Now'}
+                </button>
               </nav>
             </div>
           </div>
