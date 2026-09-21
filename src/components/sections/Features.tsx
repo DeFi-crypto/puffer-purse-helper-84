@@ -5,7 +5,7 @@ const ITEMS = [
   {
     n: '01',
     t: 'Real Minnesota warmth',
-    d: 'A true puffer, not a gimmick — built for the walk from Dinkytown in January.',
+    d: '700-fill puffer insulation and a wind-blocking shell — built for the walk from Dinkytown in January, not a fashion-only layer.',
   },
   {
     n: '02',
@@ -22,39 +22,39 @@ const ITEMS = [
 const Features = () => {
   return (
     <section id="features" className="relative overflow-hidden bg-[#EDEDE7] text-[#0a0a0a]">
-      <div className="container-custom py-20 md:py-28">
+      <div className="container-custom py-12 md:py-16">
         <AnimatedSection>
-          <h2 className="font-display text-4xl sm:text-5xl mb-3">Made for the whole night</h2>
-          <p className="text-[#4a4a4a] text-lg mb-14">The walk there, the hours inside, and the walk home.</p>
+          <h2 className="font-display text-3xl sm:text-5xl mb-2">Made for the whole night</h2>
+          <p className="text-[#4a4a4a] text-base sm:text-lg mb-8 md:mb-10">The walk there, the hours inside, and the walk home.</p>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-7">
             {ITEMS.map((it, i) => (
               <AnimatedSection key={it.n} delay={i * 100}>
                 <div>
-                  <div className="font-display text-4xl text-[#22cf87] mb-3">{it.n}</div>
-                  <h3 className="text-xl font-semibold mb-2">{it.t}</h3>
-                  <p className="text-[#4a4a4a]">{it.d}</p>
+                  <div className="font-display text-3xl text-[#22cf87] mb-1.5">{it.n}</div>
+                  <h3 className="text-lg sm:text-xl font-semibold mb-1.5">{it.t}</h3>
+                  <p className="text-[#4a4a4a] text-sm sm:text-base">{it.d}</p>
                 </div>
               </AnimatedSection>
             ))}
             <AnimatedSection delay={300}>
-              <div className="flex flex-col justify-end gap-4 h-full">
-                <div className="rounded-2xl bg-[#0a0a0a] text-center py-6 px-4">
-                  <div className="font-display text-3xl text-primary mb-1">30s</div>
-                  <div className="text-white/60 text-sm">Transform Time</div>
+              <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 h-full content-end">
+                <div className="rounded-2xl bg-[#0a0a0a] text-center py-4 px-3">
+                  <div className="font-display text-2xl sm:text-3xl text-primary mb-0.5">30s</div>
+                  <div className="text-white/60 text-xs sm:text-sm">Transform Time</div>
                 </div>
-                <div className="rounded-2xl bg-[#0a0a0a] text-center py-6 px-4">
-                  <div className="font-display text-3xl text-[#ff5d9e] mb-1">100%</div>
-                  <div className="text-white/60 text-sm">Convenience</div>
+                <div className="rounded-2xl bg-[#0a0a0a] text-center py-4 px-3">
+                  <div className="font-display text-2xl sm:text-3xl text-[#ff5d9e] mb-0.5">700</div>
+                  <div className="text-white/60 text-xs sm:text-sm">Fill Power</div>
                 </div>
               </div>
             </AnimatedSection>
           </div>
 
           <AnimatedSection direction="right">
-            <div className="relative max-w-sm mx-auto">
+            <div className="relative max-w-[280px] sm:max-w-sm mx-auto">
               <div className="rounded-3xl overflow-hidden bg-black shadow-2xl aspect-[9/16]">
                 <video
                   src="/media/transform.mp4"
@@ -67,8 +67,8 @@ const Features = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="absolute -top-5 -left-5 w-12 h-12 rounded-full bg-primary opacity-90" />
-              <div className="absolute -bottom-5 -right-5 w-14 h-14 rounded-2xl bg-secondary opacity-80" />
+              <div className="absolute -top-4 -left-4 w-10 h-10 rounded-full bg-primary opacity-90" />
+              <div className="absolute -bottom-4 -right-4 w-12 h-12 rounded-2xl bg-secondary opacity-80" />
             </div>
           </AnimatedSection>
         </div>

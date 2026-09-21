@@ -60,12 +60,12 @@ const GirlsGetIt = () => {
   };
 
   return (
-    <section id="use-cases" className="section-padding bg-background relative overflow-hidden">
+    <section id="use-cases" className="py-12 md:py-16 bg-background relative overflow-hidden">
       <div className="container-custom relative z-10">
         <AnimatedSection>
-          <div className="text-center max-w-3xl mx-auto mb-6">
-            <div className="tag inline-block mb-4">On your feed</div>
-            <h2 className="font-display text-4xl sm:text-5xl text-foreground mb-6">Girls get it</h2>
+          <div className="text-center max-w-3xl mx-auto mb-2">
+            <div className="tag inline-block mb-3">On your feed</div>
+            <h2 className="font-display text-3xl sm:text-5xl text-foreground mb-4">Girls get it</h2>
             <div className="flex items-center justify-center gap-6 text-white/80">
               <a
                 href="https://www.tiktok.com/@minnyapparel"
@@ -89,10 +89,10 @@ const GirlsGetIt = () => {
           </div>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6 lg:gap-10 mt-12 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8 mt-8 max-w-5xl mx-auto">
           {CARDS.map((c, i) => (
             <AnimatedSection key={c.src} delay={i * 120} className={c.order}>
-              <div className={`relative rounded-[28px] overflow-hidden bg-black border border-white/10 shadow-2xl aspect-[9/16] max-w-[320px] mx-auto`}>
+              <div className="relative rounded-[28px] overflow-hidden bg-black border border-white/10 shadow-2xl aspect-[9/16] max-w-[280px] sm:max-w-[300px] mx-auto">
                 <video
                   ref={(el) => { refs.current[i] = el; }}
                   src={c.src}

@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/sections/Hero';
-import HowItWorks from '@/components/sections/HowItWorks';
 import Features from '@/components/sections/Features';
 import GirlsGetIt from '@/components/sections/GirlsGetIt';
-import Newsletter from '@/components/sections/Newsletter';
 import FAQ from '@/components/sections/FAQ';
+import Newsletter from '@/components/sections/Newsletter';
 import Footer from '@/components/sections/Footer';
-import StructuredData from '@/components/SEO/StructuredData';
 import ExitIntent from '@/components/ExitIntent';
 
 const Index = () => {
@@ -16,12 +14,10 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <StructuredData />
+    <div className="min-h-screen bg-background text-foreground">
       <Navbar />
       <main>
         <Hero />
-        <HowItWorks />
         <Features />
         <GirlsGetIt />
         <FAQ />

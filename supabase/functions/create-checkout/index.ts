@@ -1,73 +1,96 @@
-﻿import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
+// Plain fetch against the Stripe API — the Stripe SDK BOOT_ERRORs on Supabase Edge.
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const PRICE_CENTS = 17999; // $179.99
+const PRODUCT_NAME = 'Minny — Convertible Puffer Purse (Pre-Order)';
+const PRODUCT_DESC =
+  'Pre-order from our first production run. Ships when production is complete — no fixed ship date. ' +
+  'Full terms: https://minnyapparel.com/terms';
+const TERMS_MSG =
+  'I understand this is a pre-order with no fixed ship date and no time obligation to deliver by a ' +
+  'particular date; my order ships when production is complete. I agree to the [pre-order terms](https://minnyapparel.com/terms).';
+
+function json(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+async function createSession(key: string, params: URLSearchParams) {
+  const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${key}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: params.toString(),
+  });
+  const data = await res.json();
+  return { ok: res.ok, data };
+}
+
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
+  if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
   try {
     const stripeKey = Deno.env.get('STRIPE_SECRET_KEY');
     if (!stripeKey) {
       console.error('STRIPE_SECRET_KEY is not set');
-      return new Response(
-        JSON.stringify({ error: 'Payment system is not configured' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return json({ error: 'Payment system is not configured' }, 500);
     }
-
-    const stripe = new Stripe(stripeKey, {
-      apiVersion: '2024-06-20',
-      httpClient: Stripe.createFetchHttpClient(),
-    });
 
     const origin =
       req.headers.get('origin') ||
       req.headers.get('referer')?.replace(/\/$/, '') ||
       'https://minnyapparel.com';
 
-    const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            unit_amount: 100,
-            product_data: {
-              name: 'Minny VIP Pre-Order — Guaranteed Exclusive Discount',
-              description:
-                "We're offering a limited group the chance to lock in our lowest launch price. " +
-                "For $1, you'll be added to our VIP list and guaranteed access to exclusive pricing " +
-                "when we officially launch, no matter the platform.",
-            },
-          },
-          quantity: 1,
-        },
-      ],
-      billing_address_collection: 'auto',
-      customer_creation: 'always',
-      success_url: `${origin}/pre-order/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/pre-order`,
-      metadata: {
-        type: 'vip_preorder',
-        brand: 'MinnyApparel',
-      },
-    });
+    const base = new URLSearchParams();
+    base.set('mode', 'payment');
+    base.set('line_items[0][price_data][currency]', 'usd');
+    base.set('line_items[0][price_data][unit_amount]', String(PRICE_CENTS));
+    base.set('line_items[0][price_data][product_data][name]', PRODUCT_NAME);
+    base.set('line_items[0][price_data][product_data][description]', PRODUCT_DESC);
+    base.set('line_items[0][quantity]', '1');
+    base.set('billing_address_collection', 'required');
+    base.set('shipping_address_collection[allowed_countries][0]', 'US');
+    base.set('customer_creation', 'always');
+    base.set('phone_number_collection[enabled]', 'true');
+    base.set('success_url', `${origin}/pre-order/success?session_id={CHECKOUT_SESSION_ID}`);
+    base.set('cancel_url', `${origin}/pre-order`);
+    base.set('metadata[type]', 'vip_preorder'); // keep: the webhook keys off this value
+    base.set('metadata[brand]', 'MinnyApparel');
+    base.set('metadata[price_cents]', String(PRICE_CENTS));
+    base.set('metadata[accepted_terms_on_site]', 'true');
+    base.set('custom_text[submit][message]',
+      'Pre-order: ships when production is complete. No fixed ship date.');
 
-    return new Response(
-      JSON.stringify({ url: session.url }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    // First try with Stripe's own terms-of-service checkbox. This requires a Terms of
+    // Service URL to be set in the Stripe Dashboard (Settings → Public details); if it
+    // isn't, Stripe rejects the request and we fall back to a session without it.
+    const withTos = new URLSearchParams(base);
+    withTos.set('consent_collection[terms_of_service]', 'required');
+    withTos.set('custom_text[terms_of_service_acceptance][message]', TERMS_MSG);
+
+    let result = await createSession(stripeKey, withTos);
+    if (!result.ok) {
+      console.warn('Checkout with consent_collection failed, retrying without:', result.data?.error?.message);
+      result = await createSession(stripeKey, base);
+    }
+
+    if (!result.ok) {
+      console.error('Stripe error:', result.data);
+      return json({ error: result.data?.error?.message || 'Failed to create checkout session' }, 500);
+    }
+
+    return json({ url: result.data.url });
   } catch (error) {
     console.error('Stripe checkout error:', error);
-    return new Response(
-      JSON.stringify({ error: error.message || 'Failed to create checkout session' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return json({ error: (error as Error).message || 'Failed to create checkout session' }, 500);
   }
 });
