@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { X, Send, Loader2, Copy, Check } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { useCheckout } from '@/hooks/use-checkout';
 
 const KEY = 'minny_exit_popup_seen';
 const CODE = 'MINNY10';
@@ -13,6 +13,7 @@ const ExitIntent = () => {
   const [done, setDone] = useState(false);
   const [err, setErr] = useState('');
   const [copied, setCopied] = useState(false);
+  const { isCheckingOut, startCheckout } = useCheckout();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -87,7 +88,7 @@ const ExitIntent = () => {
               Take <span className="text-primary">10% off</span> your Minny.
             </h3>
             <p className="text-white/70 text-sm sm:text-base mb-5">
-              Drop your email and we'll send you a one-time code for 10% off your pre-order.
+              Drop your email and we'll send you a code for 10% off your pre-order.
             </p>
             <form onSubmit={submit} className="relative">
               <input
@@ -109,7 +110,7 @@ const ExitIntent = () => {
               </button>
             </form>
             {err && <div className="mt-3 text-sm text-red-400">{err}</div>}
-            <div className="mt-4 text-xs text-white/40">One code per person. Unsubscribe any time.</div>
+            <div className="mt-4 text-xs text-white/40">Limited-time offer. Unsubscribe any time.</div>
           </>
         ) : (
           <>
@@ -125,13 +126,17 @@ const ExitIntent = () => {
               {CODE}
               {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
             </button>
-            <Link
-              to="/pre-order"
-              onClick={() => setOpen(false)}
-              className="mt-5 inline-flex items-center justify-center rounded-full bg-primary text-black font-semibold px-7 h-12 hover:bg-primary/90"
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                startCheckout();
+              }}
+              disabled={isCheckingOut}
+              className="mt-5 inline-flex items-center justify-center rounded-full bg-primary text-black font-semibold px-7 h-12 hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Use it on my pre-order
-            </Link>
+              {isCheckingOut ? 'Opening checkout…' : 'Use it at checkout'}
+            </button>
           </>
         )}
       </div>

@@ -58,8 +58,9 @@ serve(async (req) => {
     base.set('shipping_address_collection[allowed_countries][0]', 'US');
     base.set('customer_creation', 'always');
     base.set('phone_number_collection[enabled]', 'true');
+    base.set('allow_promotion_codes', 'true');
     base.set('success_url', `${origin}/pre-order/success?session_id={CHECKOUT_SESSION_ID}`);
-    base.set('cancel_url', `${origin}/pre-order`);
+    base.set('cancel_url', `${origin}/`);
     base.set('metadata[type]', 'vip_preorder'); // keep: the webhook keys off this value
     base.set('metadata[brand]', 'MinnyApparel');
     base.set('metadata[price_cents]', String(PRICE_CENTS));

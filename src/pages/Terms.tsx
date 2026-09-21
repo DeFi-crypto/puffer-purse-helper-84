@@ -10,9 +10,9 @@ const Terms = () => {
   return (
     <div className="min-h-[100svh] bg-background text-foreground">
       <div className="container-custom max-w-3xl py-10 sm:py-16">
-        <Link to="/pre-order" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
+        <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to pre-order
+          Back to home
         </Link>
 
         <h1 className="font-display text-3xl sm:text-5xl mb-2">Pre-Order Terms</h1>
