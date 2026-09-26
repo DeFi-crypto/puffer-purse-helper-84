@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, Loader2 } from 'lucide-react';
+import { Check, Loader2, Send } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 /** Compact newsletter signup for the hero; posts to the same `subscribe` function as the Newsletter section. */
@@ -55,9 +55,10 @@ const HeroSignup = () => {
         <button
           type="submit"
           disabled={busy}
-          className="inline-flex items-center justify-center rounded-full bg-white text-black font-semibold px-4 sm:px-6 h-9 sm:h-11 text-[14px] sm:text-[15px] hover:bg-white/90 transition-colors disabled:opacity-70"
+          aria-label="Sign up"
+          className="inline-flex items-center justify-center rounded-full text-primary h-9 w-9 sm:h-11 sm:w-11 shrink-0 hover:bg-primary/15 transition-colors disabled:opacity-70"
         >
-          {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Sign up'}
+          {busy ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5 sm:h-[22px] sm:w-[22px]" />}
         </button>
       </div>
       {err && <p className="mt-1.5 text-[12px] text-red-400">{err}</p>}

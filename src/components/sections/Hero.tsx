@@ -144,7 +144,7 @@ const Hero = () => {
                   17% off
                 </span>
                 <span className="text-white/50 line-through">$179.99</span>
-                <span className="font-semibold text-white">$149.99 pre-order price</span>
+                <span className="font-semibold text-white">Limited time only</span>
               </div>
 
               <div className="flex flex-row flex-wrap gap-2 sm:gap-3">
