@@ -6,7 +6,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const PRICE_CENTS = 17999; // $179.99
+const PRICE_CENTS = 14999; // $149.99
 const PRODUCT_NAME = 'Minny — Convertible Puffer Purse (Pre-Order)';
 const PRODUCT_DESC =
   'Pre-order from our first production run. Ships when production is complete — no fixed ship date. ' +

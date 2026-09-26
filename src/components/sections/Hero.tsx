@@ -145,7 +145,7 @@ const Hero = () => {
                   disabled={isCheckingOut}
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-primary text-black font-semibold px-6 sm:px-8 h-11 sm:h-14 text-[15px] sm:text-base hover:bg-primary/90 transition-colors shadow-[0_0_28px_rgba(51,242,160,0.35)] disabled:cursor-wait disabled:opacity-70"
                 >
-                  {isCheckingOut ? 'Opening secure checkout…' : 'Pre-Order — $179.99'}
+                  {isCheckingOut ? 'Opening secure checkout…' : 'Pre-Order — $149.99'}
                   {!isCheckingOut && <ArrowRight className="h-5 w-5" />}
                 </button>
                 <a

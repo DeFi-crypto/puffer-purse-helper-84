@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight, Check, Loader2, ShieldCheck, Lock } from 'lucide
 import { Button } from '@/components/ui/button';
 import { useCheckout } from '@/hooks/use-checkout';
 
-const PRICE = '$179.99';
+const PRICE = '$149.99';
 
 const perks = [
   'A real down-and-feather puffer that folds into a purse in 30 seconds',
@@ -17,7 +17,7 @@ const PreOrder = () => {
   const { isCheckingOut, startCheckout } = useCheckout();
 
   useEffect(() => {
-    document.title = 'Pre-Order Minny — $179.99';
+    document.title = 'Pre-Order Minny — $149.99';
   }, []);
 
   return (
