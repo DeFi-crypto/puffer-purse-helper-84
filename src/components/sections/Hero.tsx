@@ -105,7 +105,7 @@ const Hero = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/90" />
         </div>
 
-        <div className="container-custom relative z-10 h-full flex items-center pt-16 sm:pt-20 pb-6">
+        <div className="container-custom relative z-10 h-full flex items-start lg:items-center pt-[92px] sm:pt-24 lg:pt-20 pb-6">
           <div className="grid w-full grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-6 lg:gap-12 items-center">
             {/* ---------- Copy ---------- */}
             <div className="animate-fade-up">
@@ -122,7 +122,7 @@ const Hero = () => {
 
               <p className="text-white/80 text-[14px] sm:text-base xl:text-lg max-w-lg mb-4 sm:mb-5">
                 Minny is a purse that unfolds into a real puffer jacket. Wear it there,
-                clip it up inside — no coat check, nothing left behind.
+                clip it up inside.
               </p>
 
               <ul className="space-y-1.5 sm:space-y-2.5 mb-5 sm:mb-6">
