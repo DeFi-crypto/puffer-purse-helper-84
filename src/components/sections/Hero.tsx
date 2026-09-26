@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import { useCheckout } from '@/hooks/use-checkout';
+import HeroSignup from '@/components/HeroSignup';
 
 const STEPS = ['Unclip', 'Unfold', 'Zip up'];
 
@@ -138,23 +139,24 @@ const Hero = () => {
                 ))}
               </ul>
 
-              <div className="flex flex-row flex-wrap gap-3">
+              <div className="flex flex-row flex-wrap gap-2 sm:gap-3">
                 <button
                   type="button"
                   onClick={startCheckout}
                   disabled={isCheckingOut}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-primary text-black font-semibold px-6 sm:px-8 h-11 sm:h-14 text-[15px] sm:text-base hover:bg-primary/90 transition-colors shadow-[0_0_28px_rgba(51,242,160,0.35)] disabled:cursor-wait disabled:opacity-70"
+                  className="inline-flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap rounded-full bg-primary text-black font-semibold px-4 sm:px-8 h-11 sm:h-14 text-[14px] sm:text-base hover:bg-primary/90 transition-colors shadow-[0_0_28px_rgba(51,242,160,0.35)] disabled:cursor-wait disabled:opacity-70"
                 >
                   {isCheckingOut ? 'Opening secure checkout…' : 'Pre-Order — $149.99'}
-                  {!isCheckingOut && <ArrowRight className="h-5 w-5" />}
+                  {!isCheckingOut && <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />}
                 </button>
                 <a
                   href="#features"
-                  className="inline-flex items-center justify-center rounded-full border border-primary/60 text-primary px-6 sm:px-8 h-11 sm:h-14 text-[15px] sm:text-base hover:bg-primary/10 transition-colors"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-primary/60 text-primary px-4 sm:px-8 h-11 sm:h-14 text-[14px] sm:text-base hover:bg-primary/10 transition-colors"
                 >
                   Why it's warm
                 </a>
               </div>
+              <HeroSignup />
               <p className="mt-3 text-[12px] sm:text-[13px] text-white/55">
                 By clicking Pre-Order, you agree to our{' '}
                 <Link to="/terms" className="text-primary underline underline-offset-2 hover:text-primary/80">
