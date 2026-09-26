@@ -139,6 +139,14 @@ const Hero = () => {
                 ))}
               </ul>
 
+              <div className="mb-2.5 sm:mb-3 flex items-center gap-2 text-[13px] sm:text-sm">
+                <span className="rounded-full bg-red-500 px-2.5 py-0.5 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-white shadow-[0_0_16px_rgba(239,68,68,0.45)]">
+                  17% off
+                </span>
+                <span className="text-white/50 line-through">$179.99</span>
+                <span className="font-semibold text-white">$149.99 pre-order price</span>
+              </div>
+
               <div className="flex flex-row flex-wrap gap-2 sm:gap-3">
                 <button
                   type="button"
