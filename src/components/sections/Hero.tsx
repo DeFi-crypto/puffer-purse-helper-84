@@ -139,14 +139,6 @@ const Hero = () => {
                 ))}
               </ul>
 
-              <div className="mb-2.5 sm:mb-3 flex items-center gap-2 text-[13px] sm:text-sm">
-                <span className="rounded-full bg-red-500 px-2.5 py-0.5 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-white shadow-[0_0_16px_rgba(239,68,68,0.45)]">
-                  17% off
-                </span>
-                <span className="text-white/50 line-through">$179.99</span>
-                <span className="font-semibold text-white">Limited time only</span>
-              </div>
-
               <div className="flex flex-row flex-wrap gap-2 sm:gap-3">
                 <button
                   type="button"
@@ -154,7 +146,7 @@ const Hero = () => {
                   disabled={isCheckingOut}
                   className="inline-flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap rounded-full bg-primary text-black font-semibold px-4 sm:px-8 h-11 sm:h-14 text-[14px] sm:text-base hover:bg-primary/90 transition-colors shadow-[0_0_28px_rgba(51,242,160,0.35)] disabled:cursor-wait disabled:opacity-70"
                 >
-                  {isCheckingOut ? 'Opening secure checkout…' : 'Pre-Order — $149.99'}
+                  {isCheckingOut ? 'Opening secure checkout…' : 'Pre-Order — $179.99'}
                   {!isCheckingOut && <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />}
                 </button>
                 <a
