@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { useInViewAutoplay } from '@/hooks/use-inview-autoplay';
 import AnimatedSection from '../ui/AnimatedSection';
 
 const ITEMS = [
@@ -20,6 +21,9 @@ const ITEMS = [
 ];
 
 const Features = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useInViewAutoplay(() => [videoRef.current]);
+
   return (
     <section id="features" className="relative overflow-hidden bg-[#EDEDE7] text-[#0a0a0a]">
       <div className="container-custom py-12 md:py-16">
@@ -57,11 +61,11 @@ const Features = () => {
             <div className="relative max-w-[280px] sm:max-w-sm mx-auto">
               <div className="rounded-3xl overflow-hidden bg-black shadow-2xl aspect-[9/16]">
                 <video
+                  ref={videoRef}
                   src="/media/transform.mp4"
                   poster="/media/transform-poster.jpg"
                   muted
                   loop
-                  autoPlay
                   playsInline
                   preload="metadata"
                   className="w-full h-full object-cover"

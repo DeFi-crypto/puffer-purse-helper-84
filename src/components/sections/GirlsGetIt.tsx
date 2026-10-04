@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import AnimatedSection from '../ui/AnimatedSection';
+import { useInViewAutoplay } from '@/hooks/use-inview-autoplay';
 
 const TikTokIcon = ({ className = '' }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
@@ -43,6 +44,7 @@ const CARDS = [
 const GirlsGetIt = () => {
   const refs = useRef<(HTMLVideoElement | null)[]>([]);
   const [soundOn, setSoundOn] = useState<number | null>(null);
+  useInViewAutoplay(() => refs.current, 0.6);
 
   const toggleSound = (i: number) => {
     const v = refs.current[i];
@@ -66,12 +68,12 @@ const GirlsGetIt = () => {
           <div className="text-center max-w-3xl mx-auto mb-2">
             <div className="tag inline-block mb-3">On your feed</div>
             <h2 className="font-display text-3xl sm:text-5xl text-foreground mb-4">Girls get it</h2>
-            <div className="flex items-center justify-center gap-6 text-white/80">
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-white/80">
               <a
                 href="https://www.tiktok.com/@minnyapparel"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 hover:text-primary transition-colors"
+                className="inline-flex items-center gap-2 py-1.5 hover:text-primary transition-colors"
               >
                 <TikTokIcon className="h-5 w-5" />
                 <span className="font-medium">@minnyapparel</span>
@@ -80,7 +82,7 @@ const GirlsGetIt = () => {
                 href="https://www.instagram.com/minnyapparel/"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 hover:text-primary transition-colors"
+                className="inline-flex items-center gap-2 py-1.5 hover:text-primary transition-colors"
               >
                 <InstagramIcon className="h-5 w-5" />
                 <span className="font-medium">@minnyapparel</span>
@@ -89,17 +91,18 @@ const GirlsGetIt = () => {
           </div>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8 mt-8 max-w-5xl mx-auto">
+        {/* Phones: swipeable row so three tall videos don't take three screens of scrolling. */}
+        <AnimatedSection>
+        <div className="flex sm:grid sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mt-6 sm:mt-8 max-w-5xl -mx-4 px-4 sm:mx-auto sm:px-0 overflow-x-auto sm:overflow-visible snap-x snap-mandatory overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {CARDS.map((c, i) => (
-            <AnimatedSection key={c.src} delay={i * 120} className={c.order}>
-              <div className="relative rounded-[28px] overflow-hidden bg-black border border-white/10 shadow-2xl aspect-[9/16] max-w-[280px] sm:max-w-[300px] mx-auto">
+            <div key={c.src} className={`${c.order} shrink-0 w-[68%] max-w-[260px] sm:w-auto sm:max-w-none snap-center`}>
+              <div className="relative rounded-[28px] overflow-hidden bg-black border border-white/10 shadow-2xl aspect-[9/16] sm:max-w-[300px] mx-auto">
                 <video
                   ref={(el) => { refs.current[i] = el; }}
                   src={c.src}
                   poster={c.poster}
                   muted
                   loop
-                  autoPlay
                   playsInline
                   preload="metadata"
                   className="w-full h-full object-cover"
@@ -118,9 +121,11 @@ const GirlsGetIt = () => {
                   <div className="text-white/75 text-sm">{c.caption}</div>
                 </div>
               </div>
-            </AnimatedSection>
+            </div>
           ))}
         </div>
+        <p className="sm:hidden mt-3 text-center text-[12px] text-white/45">Swipe for more →</p>
+        </AnimatedSection>
       </div>
     </section>
   );

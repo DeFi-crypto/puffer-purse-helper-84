@@ -44,11 +44,16 @@
 
   html {
     scroll-behavior: smooth;
+    /* Anchor jumps land below the fixed navbar */
+    scroll-padding-top: 72px;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
+    overflow-x: clip;
+    -webkit-tap-highlight-color: transparent;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -116,37 +121,34 @@
 }
 
 /* Custom scroll effect for IntersectionObserver */
-.scroll-reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s ease-out;
-}
-
-.scroll-reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.scroll-reveal-left {
-  opacity: 0;
-  transform: translateX(-30px);
-  transition: all 0.8s ease-out;
-}
-
-.scroll-reveal-left.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
+.scroll-reveal,
+.scroll-reveal-left,
 .scroll-reveal-right {
   opacity: 0;
-  transform: translateX(30px);
-  transition: all 0.8s ease-out;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
+.scroll-reveal { transform: translateY(20px); }
+.scroll-reveal-left { transform: translateX(-20px); }
+.scroll-reveal-right { transform: translateX(20px); }
 
+.scroll-reveal.visible,
+.scroll-reveal-left.visible,
 .scroll-reveal-right.visible {
   opacity: 1;
-  transform: translateX(0);
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .scroll-reveal,
+  .scroll-reveal-left,
+  .scroll-reveal-right,
+  .animate-fade-up {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
 }
 
 /* ===== Minny Design System ===== */

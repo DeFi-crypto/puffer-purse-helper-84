@@ -19,15 +19,67 @@ const mapProgress = (p: number) => {
   return 0.75 + ((p - 0.55) / 0.45) * 0.25;
 };
 
+const DESKTOP_QUERY = '(min-width: 1024px)';
+
 const Hero = () => {
   const wrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [frac, setFrac] = useState(0);
+  const [isDesktop, setIsDesktop] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(DESKTOP_QUERY).matches
+  );
   const { isCheckingOut, startCheckout } = useCheckout();
 
   useEffect(() => {
+    const mql = window.matchMedia(DESKTOP_QUERY);
+    const onChange = () => setIsDesktop(mql.matches);
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
+  }, []);
+
+  // Phones/tablets: no scroll-jacking. The video just loops while it's on screen
+  // and the step labels follow its playback position.
+  useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || isDesktop) return;
+
+    let raf = 0;
+    let last = -1;
+    const tick = () => {
+      const dur = video.duration;
+      if (dur && !Number.isNaN(dur)) {
+        const f = video.currentTime / dur;
+        if (Math.abs(f - last) > 0.004) {
+          last = f;
+          setFrac(f);
+        }
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    const onPlay = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); };
+    const onPause = () => cancelAnimationFrame(raf);
+    video.addEventListener('play', onPlay);
+    video.addEventListener('pause', onPause);
+
+    const observer = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) video.play().catch(() => {}); else video.pause(); },
+      { threshold: 0.4 }
+    );
+    observer.observe(video);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      observer.disconnect();
+      video.removeEventListener('play', onPlay);
+      video.removeEventListener('pause', onPause);
+      video.pause();
+    };
+  }, [isDesktop]);
+
+  // Desktop: scroll position scrubs the video while the panel is pinned.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !isDesktop) return;
 
     let raf = 0;
     let current = 0;
@@ -74,7 +126,7 @@ const Hero = () => {
         if (Math.abs(target - current) < 0.002) current = target;
         want = current * dur;
         if (!seeking && Math.abs(video.currentTime - want) > 0.04) seek(want);
-        setFrac(current);
+        setFrac((f) => (f === current ? f : current));
       }
       raf = requestAnimationFrame(tick);
     };
@@ -86,14 +138,15 @@ const Hero = () => {
       video.removeEventListener('loadedmetadata', prime);
       document.removeEventListener('touchstart', touchPrime);
     };
-  }, []);
+  }, [isDesktop]);
 
   const active = frac < 0.33 ? 0 : frac < 0.72 ? 1 : 2;
 
   return (
-    // Tall wrapper drives the scrub; the inner panel stays pinned for one screen.
-    <section id="how-it-works" ref={wrapRef} className="relative bg-black h-[200vh] sm:h-[220vh]">
-      <div className="sticky top-0 h-[100svh] overflow-hidden">
+    // Desktop: tall wrapper drives the scrub while the inner panel stays pinned.
+    // Below lg it's a normal section so nothing gets clipped or pinned.
+    <section id="how-it-works" ref={wrapRef} className="relative bg-black lg:h-[220vh]">
+      <div className="relative overflow-hidden lg:sticky lg:top-0 lg:h-[100svh]">
         {/* Background frame from the night-out video */}
         <div className="absolute inset-0">
           <img
@@ -105,7 +158,7 @@ const Hero = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/90" />
         </div>
 
-        <div className="container-custom relative z-10 h-full flex items-start lg:items-center pt-[92px] sm:pt-24 lg:pt-20 pb-6">
+        <div className="container-custom relative z-10 lg:h-full flex items-start lg:items-center pt-[84px] sm:pt-24 lg:pt-20 pb-10 lg:pb-6">
           <div className="grid w-full grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-6 lg:gap-12 items-center">
             {/* ---------- Copy ---------- */}
             <div className="animate-fade-up">
@@ -173,19 +226,20 @@ const Hero = () => {
                   <div className="font-display text-white text-base sm:text-xl">
                     Purse to puffer in <span className="text-primary">30 seconds</span>
                   </div>
-                  <div className="hidden sm:block text-[11px] tracking-[0.18em] uppercase text-white/45">
+                  <div className="hidden lg:block text-[11px] tracking-[0.18em] uppercase text-white/45">
                     Scroll to play
                   </div>
                 </div>
                 <div className="rounded-xl sm:rounded-2xl bg-[#EDEDE7] overflow-hidden">
                   <video
                     ref={videoRef}
-                    src="/media/scrub.mp4"
-                    poster="/media/scrub-poster.jpg"
+                    src="/media/scrub.mp4?v=2"
+                    poster="/media/scrub-poster.jpg?v=2"
                     muted
                     playsInline
-                    preload="auto"
-                    className="w-full h-auto max-h-[34vh] sm:max-h-[44vh] lg:max-h-[52vh] object-contain"
+                    loop={!isDesktop}
+                    preload={isDesktop ? 'auto' : 'metadata'}
+                    className="w-full h-auto max-h-[45svh] lg:max-h-[52vh] object-contain"
                   />
                 </div>
                 <div className="mt-2.5 sm:mt-3 px-1">

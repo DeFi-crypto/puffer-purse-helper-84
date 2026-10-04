@@ -17,9 +17,23 @@ const Navbar = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Stop the page scrolling behind the open mobile menu; close it on Escape.
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setIsMobileMenuOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isMobileMenuOpen]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -29,7 +43,7 @@ const Navbar = () => {
     <header
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        isScrolled ? 'glass-nav py-3' : 'py-5 bg-transparent'
+        isScrolled ? 'glass-nav py-2 md:py-3' : 'py-3 md:py-5 bg-transparent'
       )}
     >
       <div className="container-custom flex justify-between items-center">
@@ -73,9 +87,10 @@ const Navbar = () => {
         </nav>
 
         <button 
-          className="md:hidden text-primary z-50 relative"
+          className="md:hidden text-primary z-50 relative -mr-2 h-11 w-11 inline-flex items-center justify-center rounded-full"
           onClick={toggleMobileMenu}
           aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isMobileMenuOpen}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -90,9 +105,16 @@ const Navbar = () => {
           />
           
           {/* Menu content */}
-          <div className="fixed top-20 left-0 right-0 z-40 md:hidden">
+          <div className="fixed top-[68px] left-0 right-0 z-40 md:hidden">
             <div className="mx-4 bg-black/90 backdrop-blur-md rounded-lg border border-primary/20 shadow-xl">
-              <nav className="flex flex-col space-y-4 text-lg px-6 py-8">
+              <nav className="flex flex-col space-y-2 text-lg px-6 py-6">
+                <a
+                  href="#how-it-works"
+                  className="text-primary hover:text-primary/80 transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  How It Works
+                </a>
                 <a 
                   href="#features" 
                   className="text-primary hover:text-primary/80 transition-colors py-2"
@@ -105,7 +127,7 @@ const Navbar = () => {
                   className="text-primary hover:text-primary/80 transition-colors py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Use Cases
+                  Nights Out
                 </a>
                 <a 
                   href="#faq" 

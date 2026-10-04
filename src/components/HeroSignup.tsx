@@ -50,13 +50,13 @@ const HeroSignup = () => {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Sign up for our newsletter"
           disabled={busy}
-          className="min-w-0 flex-1 bg-transparent px-4 h-9 sm:h-11 text-[14px] sm:text-base text-white placeholder:text-white/50 outline-none"
+          className="min-w-0 flex-1 bg-transparent px-4 h-10 sm:h-11 text-base text-white placeholder:text-white/50 outline-none"
         />
         <button
           type="submit"
           disabled={busy}
           aria-label="Sign up"
-          className="inline-flex items-center justify-center rounded-full text-primary h-9 w-9 sm:h-11 sm:w-11 shrink-0 hover:bg-primary/15 transition-colors disabled:opacity-70"
+          className="inline-flex items-center justify-center rounded-full text-primary h-10 w-10 sm:h-11 sm:w-11 shrink-0 hover:bg-primary/15 transition-colors disabled:opacity-70"
         >
           {busy ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5 sm:h-[22px] sm:w-[22px]" />}
         </button>

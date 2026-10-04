@@ -16,7 +16,7 @@ const TikTokIcon = () => (
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-white py-16">
+    <footer className="bg-black text-white py-12 md:py-16 pb-[max(3rem,env(safe-area-inset-bottom))]">
       <div className="container-custom">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div className="md:col-span-2">
@@ -25,10 +25,10 @@ const Footer = () => {
               Revolutionizing winter wear with our innovative transformable jacket to purse design.
               Never worry about coat check again.
             </p>
-            <div className="flex space-x-4 mt-6">
+            <div className="flex gap-6 mt-6">
               <a 
                 href="https://www.instagram.com/minnyapparel/" 
-                className="text-primary hover:text-primary/80 transition-colors" 
+                className="text-primary hover:text-primary/80 transition-colors -m-3 p-3 inline-flex" 
                 aria-label="Follow us on Instagram"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -37,7 +37,7 @@ const Footer = () => {
               </a>
               <a 
                 href="https://www.tiktok.com/@minnyapparel" 
-                className="text-primary hover:text-primary/80 transition-colors" 
+                className="text-primary hover:text-primary/80 transition-colors -m-3 p-3 inline-flex" 
                 aria-label="Follow us on TikTok"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -49,18 +49,18 @@ const Footer = () => {
           
           <div>
             <h3 className="text-lg font-semibold mb-4 text-secondary">Quick Links</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-primary transition-colors">Home</a></li>
-              <li><a href="#features" className="text-gray-300 hover:text-primary transition-colors">Features</a></li>
-              <li><a href="#use-cases" className="text-gray-300 hover:text-primary transition-colors">Use Cases</a></li>
-              <li><a href="#newsletter" className="text-gray-300 hover:text-primary transition-colors">Updates</a></li>
+            <ul className="space-y-1">
+              <li><a href="#" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">Home</a></li>
+              <li><a href="#features" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">Features</a></li>
+              <li><a href="#use-cases" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">Nights Out</a></li>
+              <li><a href="#newsletter" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">Updates</a></li>
             </ul>
           </div>
           
           <div>
             <h3 className="text-lg font-semibold mb-4 text-accent">Contact</h3>
             <ul className="space-y-2">
-              <li className="text-gray-300">contact@minnyapparel.com</li>
+              <li><a href="mailto:contact@minnyapparel.com" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors break-all">contact@minnyapparel.com</a></li>
             </ul>
           </div>
         </div>
