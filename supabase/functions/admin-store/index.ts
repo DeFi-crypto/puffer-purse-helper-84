@@ -8,6 +8,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 // POST { action: "create", code, percentOff? | amountOffCents?, maxRedemptions?, expiresAt? (unix seconds) }
 // POST { action: "set_active", id, active }
 
+// Deployed by the storefront repo's GitHub Action on push to main.
 // Pinned so the request/response shapes below don't change with the account's default API version.
 const STRIPE_VERSION = "2024-06-20";
 

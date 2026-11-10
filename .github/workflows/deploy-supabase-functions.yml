@@ -95,6 +95,7 @@ jobs:
           set -euo pipefail
           for fn in $FUNCTIONS; do
             echo "::group::Deploying $fn"
-            supabase functions deploy "$fn" --project-ref "$PROJECT_REF"
+            # --yes: newer CLI versions refuse to change a hosted project without it. --use-api: no Docker needed.
+            supabase functions deploy "$fn" --project-ref "$PROJECT_REF" --use-api --yes
             echo "::endgroup::"
           done
