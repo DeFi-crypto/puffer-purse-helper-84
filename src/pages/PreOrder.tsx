@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Check, Loader2, ShieldCheck, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCheckout } from '@/hooks/use-checkout';
-
-const PRICE = '$179.99';
+import { usePrice } from '@/hooks/use-price';
 
 const perks = [
   'A real down-and-feather puffer that folds into a purse in 30 seconds',
@@ -15,10 +14,11 @@ const perks = [
 
 const PreOrder = () => {
   const { isCheckingOut, startCheckout } = useCheckout();
+  const PRICE = usePrice();
 
   useEffect(() => {
-    document.title = 'Pre-Order Minny — $179.99';
-  }, []);
+    document.title = `Pre-Order Minny — ${PRICE}`;
+  }, [PRICE]);
 
   return (
     <div className="min-h-[100svh] flex flex-col bg-background relative overflow-hidden">

@@ -6,7 +6,28 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const PRICE_CENTS = 17999; // $179.99
+// Fallback only. The live price is the store_settings row, edited in the Mailer (Settings → Store).
+const DEFAULT_PRICE_CENTS = 17999; // $179.99
+
+/** The price set in the Mailer, or the fallback if it can't be read. Checkout must never fail on this. */
+async function currentPriceCents(): Promise<number> {
+  try {
+    const url = Deno.env.get('SUPABASE_URL');
+    const key = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    if (!url || !key) return DEFAULT_PRICE_CENTS;
+    const res = await fetch(`${url}/rest/v1/store_settings?id=eq.1&select=price_cents`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+      signal: AbortSignal.timeout(2500),
+    });
+    if (!res.ok) return DEFAULT_PRICE_CENTS;
+    const rows = await res.json();
+    const cents = Number(rows?.[0]?.price_cents);
+    return Number.isInteger(cents) && cents >= 100 && cents <= 1000000 ? cents : DEFAULT_PRICE_CENTS;
+  } catch (error) {
+    console.error('Could not read store_settings, using the default price:', error);
+    return DEFAULT_PRICE_CENTS;
+  }
+}
 const PRODUCT_NAME = 'Minny — Convertible Puffer Purse (Pre-Order)';
 const PRODUCT_DESC =
   'Pre-order from our first production run. Ships when production is complete — no fixed ship date. ' +
@@ -46,6 +67,8 @@ serve(async (req) => {
       req.headers.get('origin') ||
       req.headers.get('referer')?.replace(/\/$/, '') ||
       'https://minnyapparel.com';
+
+    const PRICE_CENTS = await currentPriceCents();
 
     const base = new URLSearchParams();
     base.set('mode', 'payment');

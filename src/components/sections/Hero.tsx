@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import { useCheckout } from '@/hooks/use-checkout';
+import { usePrice } from '@/hooks/use-price';
 import HeroSignup from '@/components/HeroSignup';
 
 const STEPS = ['Unclip', 'Unfold', 'Zip up'];
@@ -29,6 +30,7 @@ const Hero = () => {
     () => typeof window !== 'undefined' && window.matchMedia(DESKTOP_QUERY).matches
   );
   const { isCheckingOut, startCheckout } = useCheckout();
+  const price = usePrice();
 
   useEffect(() => {
     const mql = window.matchMedia(DESKTOP_QUERY);
@@ -199,7 +201,7 @@ const Hero = () => {
                   disabled={isCheckingOut}
                   className="inline-flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap rounded-full bg-primary text-black font-semibold px-4 sm:px-8 h-11 sm:h-14 text-[14px] sm:text-base hover:bg-primary/90 transition-colors shadow-[0_0_28px_rgba(51,242,160,0.35)] disabled:cursor-wait disabled:opacity-70"
                 >
-                  {isCheckingOut ? 'Opening secure checkout…' : 'Pre-Order — $179.99'}
+                  {isCheckingOut ? 'Opening secure checkout…' : `Pre-Order — ${price}`}
                   {!isCheckingOut && <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />}
                 </button>
                 <a
