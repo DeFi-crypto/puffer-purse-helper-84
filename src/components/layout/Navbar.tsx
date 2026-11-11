@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCheckout } from '@/hooks/use-checkout';
@@ -47,10 +47,10 @@ const Navbar = () => {
       )}
     >
       <div className="container-custom flex justify-between items-center">
-        <a href="#" className="flex items-center" aria-label="Minny - University of Minnesota startup">
+        <a href="#" className="flex items-center" aria-label="Minny Apparel home">
           <img 
             src="/lovable-uploads/9575f4c8-b4b8-46cc-9487-939b865fc223.png" 
-            alt="Minny Logo - Transformable jacket to purse" 
+            alt="Minny Apparel logo" 
             className="h-10 md:h-12 neon-text"
           />
         </a>

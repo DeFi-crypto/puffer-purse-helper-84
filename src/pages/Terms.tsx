@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { usePageMeta } from '@/hooks/use-page-meta';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 
 const Terms = () => {
-  useEffect(() => {
-    document.title = 'Pre-Order Terms | Minny';
-  }, []);
+  usePageMeta('/terms');
 
   return (
     <div className="min-h-[100svh] bg-background text-foreground">

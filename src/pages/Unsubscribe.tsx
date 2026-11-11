@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const FN = "https://tfuuelkswultbitktyhb.supabase.co/functions/v1/unsubscribe";
 
 const Unsubscribe = () => {
     const [state, setState] = useState("working");
+    usePageMeta("/unsubscribe");
     useEffect(() => {
           const p = new URLSearchParams(window.location.search);
           const e = p.get("e");

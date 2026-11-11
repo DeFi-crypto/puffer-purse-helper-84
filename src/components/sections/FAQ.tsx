@@ -6,34 +6,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import AnimatedSection from '../ui/AnimatedSection';
+import { FAQ_ITEMS } from '@/lib/faq';
 
 const FAQ = () => {
-  const faqItems = [
-    {
-      question: "How does it transform?",
-      answer: "A folding system tucks the down into the shell — the shell becomes the purse and the lining becomes the storage. Under 30 seconds, no practice needed."
-    },
-    {
-      question: "Is it warm enough for Minnesota winters?",
-      answer: "Yes. It's a real down-and-feather puffer, designed in Minneapolis for the walk there and back."
-    },
-    {
-      question: "What fits in the purse?",
-      answer: "Phone, wallet, keys, makeup — everything you'd take out, zipped and secure."
-    },
-    {
-      question: "Can I wash it?",
-      answer: "Machine wash on gentle with cold water, then air dry."
-    },
-    {
-      question: "When will my pre-order ship?",
-      answer: "Pre-orders are for our first production run. We'll email you the moment yours ships — there's no fixed ship date yet, and you can read the full terms before checking out."
-    },
-    {
-      question: "Do you ship internationally?",
-      answer: "US only for now. International is coming as we grow."
-    }
-  ];
+  const faqItems = FAQ_ITEMS;
 
   return (
     <section id="faq" className="py-12 md:py-16 bg-background relative overflow-hidden">
