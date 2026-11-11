@@ -26,16 +26,18 @@ export const COMPANY_PROFILES: string[] = [
  * and the /founder page, the About-page sentence and the Person schema all switch on.
  */
 export const FOUNDER = {
-  name: '',
+  name: 'Veeraj Chimanpure',
   jobTitle: 'Founder & CEO',
   /** Third-person bio, one or two short paragraphs. Use the same text on every profile. */
-  bio: [] as string[],
-  /** Path under /public, e.g. '/media/founder.jpg'. Use the same headshot on every profile. */
-  image: '',
-  /** e.g. 'University of Minnesota' */
+  bio: [
+    'Chimanpure started Minny Apparel at the University of Minnesota in Minneapolis, to fix a problem every student there knows: needing a real winter coat on the walk to a night out, and having nowhere to put it once inside.',
+  ] as string[],
+  /** Path under /public. Use the same headshot on every profile. */
+  image: '/media/veeraj-chimanpure.jpg',
+  /** e.g. 'University of Minnesota'. Left empty until graduation status is confirmed. */
   alumniOf: '',
   /** Personal profiles: LinkedIn, X, Instagram, personal site. */
-  profiles: [] as string[],
+  profiles: ['https://www.linkedin.com/in/veeraj-chimanpure/'] as string[],
 };
 
 export const hasFounder = () => FOUNDER.name.trim().length > 0;

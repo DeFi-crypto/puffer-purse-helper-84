@@ -56,6 +56,7 @@ const Footer = () => {
               <li><a href="#use-cases" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">Nights Out</a></li>
               <li><a href="#newsletter" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">Updates</a></li>
               <li><Link to="/about" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">About Minny Apparel</Link></li>
+              <li><Link to="/founder" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">Founder</Link></li>
               <li><Link to="/terms" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">Pre-Order Terms</Link></li>
             </ul>
           </div>
@@ -74,7 +75,7 @@ const Footer = () => {
           </div>
           <div>
             <a 
-              href="https://carlsonschool.umn.edu/mncup/2025MNCupSemis#:~:text=window%20or%20tab)-,Minny,-(this%20link%20opens" 
+              href="https://www.linkedin.com/in/veeraj-chimanpure/" 
               target="_blank" 
               rel="noopener noreferrer"
               aria-label="Minnesota Cup 2025 Semifinalist"
