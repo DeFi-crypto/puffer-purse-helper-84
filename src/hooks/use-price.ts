@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 // The pre-order price is set in the Mailer dashboard (Settings → Store) and stored in the
 // store_settings table. The checkout function charges the same number. DEFAULT_PRICE_CENTS is
 // only what's shown for the instant before the live price loads, or if it can't be read.
-const DEFAULT_PRICE_CENTS = 17999;
+export const DEFAULT_PRICE_CENTS = 17999;
 const CACHE_KEY = 'minny_price_cents';
 
 function valid(cents: unknown): cents is number {

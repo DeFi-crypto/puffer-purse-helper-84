@@ -1,1 +1,10 @@
-/*    /index.html   200
+# Send the Netlify subdomain copy of the site to the real domain (kills the duplicate).
+https://minnyapparel.netlify.app/*  https://minnyapparel.com/:splat  301!
+http://minnyapparel.netlify.app/*   https://minnyapparel.com/:splat  301!
+
+# Old paths
+/pre-order              /       301
+/terms-and-conditions   /terms  301
+
+# No catch-all on purpose: every real page is a prerendered HTML file, and anything else
+# gets 404.html with a real 404 status instead of a copy of the homepage.

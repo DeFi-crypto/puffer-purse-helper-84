@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Instagram } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const TikTokIcon = () => (
   <svg
@@ -20,7 +21,7 @@ const Footer = () => {
       <div className="container-custom">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div className="md:col-span-2">
-            <h2 className="text-2xl font-bold mb-4 text-primary neon-text">Minny</h2>
+            <h2 className="text-2xl font-bold mb-4 text-primary neon-text">Minny Apparel</h2>
             <p className="text-gray-300 max-w-md">
               Revolutionizing winter wear with our innovative transformable jacket to purse design.
               Never worry about coat check again.
@@ -54,6 +55,9 @@ const Footer = () => {
               <li><a href="#features" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">Features</a></li>
               <li><a href="#use-cases" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">Nights Out</a></li>
               <li><a href="#newsletter" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">Updates</a></li>
+              <li><Link to="/about" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">About Minny Apparel</Link></li>
+              <li><Link to="/founder" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">Founder</Link></li>
+              <li><Link to="/terms" className="inline-block py-1.5 text-gray-300 hover:text-primary transition-colors">Pre-Order Terms</Link></li>
             </ul>
           </div>
           
@@ -67,11 +71,11 @@ const Footer = () => {
         
         <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
           <div className="text-gray-400 text-sm mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} Minny. All rights reserved.
+            &copy; {new Date().getFullYear()} Minny Apparel. All rights reserved.
           </div>
           <div>
             <a 
-              href="https://carlsonschool.umn.edu/mncup/2025MNCupSemis#:~:text=window%20or%20tab)-,Minny,-(this%20link%20opens" 
+              href="https://www.linkedin.com/in/veeraj-chimanpure/" 
               target="_blank" 
               rel="noopener noreferrer"
               aria-label="Minnesota Cup 2025 Semifinalist"

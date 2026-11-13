@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /unsubscribe
+Disallow: /pre-order/success
 
-Sitemap: https://minny.lovable.app/sitemap.xml
+Sitemap: https://minnyapparel.com/sitemap.xml

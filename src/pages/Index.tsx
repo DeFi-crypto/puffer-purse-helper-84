@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { usePageMeta } from '@/hooks/use-page-meta';
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/sections/Hero';
 import Features from '@/components/sections/Features';
@@ -9,9 +10,7 @@ import Footer from '@/components/sections/Footer';
 import ExitIntent from '@/components/ExitIntent';
 
 const Index = () => {
-  useEffect(() => {
-    document.title = 'Minny | The Purse That Transforms Into a Jacket';
-  }, []);
+  usePageMeta('/');
 
   return (
     <div className="min-h-screen bg-background text-foreground">

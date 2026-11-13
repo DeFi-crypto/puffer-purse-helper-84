@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { usePageMeta } from '@/hooks/use-page-meta';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, ArrowLeft } from 'lucide-react';
 
 const PreOrderSuccess = () => {
-  useEffect(() => {
-    document.title = 'Pre-Order Confirmed | Minny';
-  }, []);
+  usePageMeta('/pre-order/success');
 
   return (
     <div className="min-h-[100svh] flex flex-col bg-background relative overflow-hidden">
