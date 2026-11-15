@@ -1,6 +1,17 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.4";
 
+// Website signups (newsletter forms and the exit popup).
+//
+// Every subscriber gets their own one-time discount code, named after them (EMILY10). It is a real
+// Stripe promotion code limited to one redemption, stored on their subscribers row, and emailed in the
+// welcome email. Asking again (same email) re-sends the same code, never a second one.
+//
+// The email is the live `welcome` / `exit_popup` template from the Mailer dashboard when it contains
+// {{DISCOUNT_CODE}}; otherwise the built-in design below is used, so the code is always delivered.
+// Tags filled in here: {{DISCOUNT_CODE}} {{DISCOUNT_PERCENT}} {{first_name}} {{first_name|there}}
+// {{email}} {{UNSUBSCRIBE_URL}}.
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -8,27 +19,29 @@ const corsHeaders = {
 
 const FROM = 'Minny <hello@minnyapparel.com>';
 const FN_BASE = 'https://tfuuelkswultbitktyhb.supabase.co/functions/v1';
-const CODE = 'MINNY10';
+const SHOP_URL = 'https://minnyapparel.com/pre-order';
 
-type EmailTemplate = { subject: string | null; html: string | null };
-type TemplateStore = {
-  from: (table: string) => {
-    select: (columns: string) => {
-      eq: (column: string, value: string) => {
-        maybeSingle: () => Promise<{ data: unknown }>;
-      };
-    };
-  };
-};
+const DISCOUNT_PERCENT = 10;
+// One shared Stripe coupon (the 10% rule); each subscriber gets their own promotion code on top of it.
+const WELCOME_COUPON_ID = `minny-welcome-${DISCOUNT_PERCENT}`;
+// Shared code used only if Stripe can't be reached, so the email never goes out without a working code.
+const FALLBACK_CODE = 'MINNY10';
+// Pinned so request/response shapes don't change with the account's default API version.
+const STRIPE_VERSION = '2024-06-20';
 
+function json(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+}
+
+function escapeHtml(value: string): string {
+  return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+// ---------------------------------------------------------------------------
+// Unsubscribe link (must match the unsubscribe function and the Mailer app)
+// ---------------------------------------------------------------------------
 async function unsubToken(email: string, secret: string): Promise<string> {
-  const key = await crypto.subtle.importKey(
-    'raw',
-    new TextEncoder().encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  );
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   const mac = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(email.toLowerCase()));
   return [...new Uint8Array(mac)].map((b) => b.toString(16).padStart(2, '0')).join('');
 }
@@ -37,65 +50,146 @@ function unsubUrl(email: string, token: string): string {
   return `${FN_BASE}/unsubscribe?e=${encodeURIComponent(email)}&t=${token}`;
 }
 
-function isEmailTemplate(value: unknown): value is EmailTemplate {
-  return typeof value === 'object' && value !== null && 'subject' in value && 'html' in value;
+// ---------------------------------------------------------------------------
+// Personal discount codes
+// ---------------------------------------------------------------------------
+async function stripe(key: string, method: 'GET' | 'POST', path: string, params?: URLSearchParams) {
+  const res = await fetch(`https://api.stripe.com/v1/${path}`, {
+    method,
+    headers: {
+      Authorization: `Bearer ${key}`,
+      'Stripe-Version': STRIPE_VERSION,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: method === 'POST' ? (params ?? new URLSearchParams()).toString() : undefined,
+  });
+  const data = await res.json().catch(() => ({}));
+  return { ok: res.ok, status: res.status, data };
 }
 
-async function getTemplate(sb: TemplateStore, key: string): Promise<EmailTemplate | null> {
-  try {
-    const { data } = await sb
-      .from('email_templates')
-      .select('subject, html')
-      .eq('key', key)
-      .maybeSingle();
-    return isEmailTemplate(data) && data.html ? data : null;
-  } catch (_error) {
-    return null;
+async function ensureCoupon(key: string): Promise<boolean> {
+  const found = await stripe(key, 'GET', `coupons/${WELCOME_COUPON_ID}`);
+  if (found.ok) return true;
+  const made = await stripe(key, 'POST', 'coupons', new URLSearchParams({
+    id: WELCOME_COUPON_ID,
+    percent_off: String(DISCOUNT_PERCENT),
+    duration: 'once',
+    name: `Welcome ${DISCOUNT_PERCENT}% (personal codes)`,
+    'metadata[source]': 'minny-welcome',
+  }));
+  // Two signups at once can both try to create it; "already exists" is success.
+  return made.ok || made.data?.error?.code === 'resource_already_exists';
+}
+
+/** "Émilie-Rose" -> "EMILIEROSE". Letters only, so the code is easy to type. */
+function lettersOnly(value: string): string {
+  return value.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/[^A-Z]/g, '');
+}
+
+/** The name part of a code: their first name, else the start of their email address, else MINNY. */
+function codeBase(firstName: string, email: string): string {
+  const fromName = lettersOnly(firstName.trim().split(/\s+/)[0] ?? '').slice(0, 12);
+  if (fromName.length >= 2) return fromName;
+  const fromEmail = lettersOnly(email.split('@')[0].split(/[^A-Za-zÀ-ɏ]/)[0] ?? '').slice(0, 12);
+  return fromEmail.length >= 2 ? fromEmail : 'MINNY';
+}
+
+// No 0/O, 1/I/L: these get read out and typed.
+const CODE_CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+function randomChars(n: number): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(n));
+  return [...bytes].map((b) => CODE_CHARS[b % CODE_CHARS.length]).join('');
+}
+
+/**
+ * Creates this subscriber's own code in Stripe: EMILY10 if it's free, otherwise EMILY10-K7 and so on
+ * (Stripe codes are unique and not case-sensitive, so the hundredth Emily still gets one that works).
+ * Returns null if Stripe can't be reached or refuses for another reason.
+ */
+async function createPersonalCode(stripeKey: string, firstName: string, email: string): Promise<string | null> {
+  if (!(await ensureCoupon(stripeKey))) return null;
+  const base = `${codeBase(firstName, email)}${DISCOUNT_PERCENT}`;
+  const candidates = [
+    base,
+    ...Array.from({ length: 4 }, () => `${base}-${randomChars(2)}`),
+    ...Array.from({ length: 3 }, () => `${base}-${randomChars(4)}`),
+  ];
+  for (const code of candidates) {
+    const made = await stripe(stripeKey, 'POST', 'promotion_codes', new URLSearchParams({
+      coupon: WELCOME_COUPON_ID,
+      code,
+      max_redemptions: '1',
+      'metadata[source]': 'welcome',
+      'metadata[email]': email,
+    }));
+    if (made.ok) return String(made.data.code ?? code);
+    const err = made.data?.error;
+    const taken = err?.code === 'resource_already_exists' || /already exists|already in use/i.test(String(err?.message ?? ''));
+    if (!taken) {
+      console.error('Stripe refused the promotion code:', err?.message ?? made.status);
+      return null;
+    }
   }
+  return null;
 }
 
-function footer(unsub: string): string {
-  return `
-    <div style="padding:24px 34px 34px;border-top:1px solid #2a2f2b;margin-top:18px;text-align:center">
-      <div style="color:#646b65;font-family:Helvetica,Arial,sans-serif;font-size:11px">Minny &middot; minnyapparel.com</div>
-      <div style="margin-top:10px"><a href="${unsub}" style="color:#646b65;font-family:Helvetica,Arial,sans-serif;font-size:11px;text-decoration:underline">Unsubscribe</a></div>
-    </div>`;
+// ---------------------------------------------------------------------------
+// Email
+// ---------------------------------------------------------------------------
+type Vars = { code: string; firstName: string; email: string; unsub: string };
+
+// {{ name }} or {{ name | fallback }}: the same tag syntax the Mailer dashboard uses.
+const TAG = /\{\{\s*([A-Za-z_][A-Za-z0-9_]*)\s*(?:\|([^{}]*))?\}\}/g;
+
+function fillTags(text: string, vars: Vars, asHtml: boolean): string {
+  const esc = (value: string) => (asHtml ? escapeHtml(value) : value);
+  return text.replace(TAG, (match: string, name: string, fallback?: string) => {
+    switch (name) {
+      case 'DISCOUNT_CODE':
+        return esc(vars.code);
+      case 'DISCOUNT_PERCENT':
+        return String(DISCOUNT_PERCENT);
+      case 'first_name':
+      case 'FIRST_NAME':
+        return vars.firstName ? esc(vars.firstName) : (fallback ?? '').trim();
+      case 'email':
+        return esc(vars.email);
+      case 'UNSUBSCRIBE_URL':
+        return vars.unsub;
+      default:
+        return match;
+    }
+  });
 }
 
-function welcomeHtml(unsub: string): string {
-  return `
-    <div style="background:#0B0C0B;padding:32px 0;font-family:Helvetica,Arial,sans-serif">
-      <div style="max-width:560px;margin:0 auto;background:#101410;border-radius:16px;overflow:hidden">
-        <div style="padding:34px 34px 8px">
-          <div style="color:#C6FF3D;font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase">MINNY</div>
-          <h1 style="color:#fff;font-size:30px;line-height:1.1;letter-spacing:-.02em;margin:14px 0 0">Thanks for subscribing.</h1>
-        </div>
-        <div style="padding:14px 34px 4px;color:#9AA39C;font-size:15px;line-height:1.65">
-          You're on the list. We'll send first looks at new drops, behind-the-scenes from the studio,
-          and early access before anyone else. No spam &mdash; just the good stuff.
-        </div>
-        ${footer(unsub)}
-      </div>
-    </div>`;
-}
+const DEFAULT_SUBJECT = "Here's your discount code";
 
-function exitOfferHtml(unsub: string): string {
-  return `
-    <div style="background:#0B0C0B;padding:32px 0;font-family:Helvetica,Arial,sans-serif">
-      <div style="max-width:560px;margin:0 auto;background:#101410;border-radius:16px;overflow:hidden">
-        <div style="padding:34px 34px 8px">
-          <div style="color:#C6FF3D;font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase">MINNY &middot; 10% OFF</div>
-          <h1 style="color:#fff;font-size:30px;line-height:1.1;letter-spacing:-.02em;margin:14px 0 0">Your Minny is waiting.</h1>
-        </div>
-        <div style="padding:14px 34px 4px;color:#D9DED9;font-size:15px;line-height:1.65">
-          Thanks for joining us. Use this code at Stripe Checkout to take 10% off your Minny pre-order.
-        </div>
-        <div style="margin:24px 34px 8px;padding:17px;text-align:center;border:1px solid #C6FF3D;border-radius:12px;color:#C6FF3D;font-family:monospace;font-size:26px;font-weight:800;letter-spacing:.16em">${CODE}</div>
-        <div style="padding:18px 34px 4px;text-align:center"><a href="https://minnyapparel.com" style="display:inline-block;background:#C6FF3D;color:#0B0C0B;padding:13px 22px;border-radius:999px;font-weight:800;font-size:14px;text-decoration:none">Use my 10% off</a></div>
-        ${footer(unsub)}
-      </div>
-    </div>`;
-}
+// Brand: green #33f2a0, black #0a0a0a. Tables + inline styles for email clients.
+const DEFAULT_HTML = `
+<div style="background:#0a0a0a;padding:32px 12px;font-family:Helvetica,Arial,sans-serif">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style="max-width:560px;margin:0 auto;background:#101410;border-radius:16px">
+    <tr><td style="padding:34px 34px 6px">
+      <div style="color:#33f2a0;font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase">MINNY &middot; {{DISCOUNT_PERCENT}}% OFF</div>
+      <h1 style="color:#ffffff;font-size:30px;line-height:1.15;margin:14px 0 0">Here's your discount code.</h1>
+    </td></tr>
+    <tr><td style="padding:14px 34px 4px;color:#d9ded9;font-size:15px;line-height:1.65">
+      Hey {{first_name|there}}, thanks for subscribing. This code is yours: it takes {{DISCOUNT_PERCENT}}% off your Minny pre-order and works once.
+    </td></tr>
+    <tr><td style="padding:22px 34px 6px">
+      <div style="padding:18px;text-align:center;border:2px dashed #33f2a0;border-radius:12px;color:#33f2a0;font-family:'Courier New',monospace;font-size:26px;font-weight:800;letter-spacing:.12em">{{DISCOUNT_CODE}}</div>
+    </td></tr>
+    <tr><td align="center" style="padding:18px 34px 4px">
+      <a href="${SHOP_URL}" style="display:inline-block;background:#33f2a0;color:#0a0a0a;padding:13px 24px;border-radius:999px;font-weight:800;font-size:14px;text-decoration:none">Use my {{DISCOUNT_PERCENT}}% off</a>
+    </td></tr>
+    <tr><td style="padding:14px 34px 0;color:#9aa39c;font-size:13px;line-height:1.6;text-align:center">
+      Enter the code on the checkout page. You'll also get first looks at new drops and early access. No spam.
+    </td></tr>
+    <tr><td style="padding:24px 34px 34px;text-align:center">
+      <div style="border-top:1px solid #2a2f2b;padding-top:18px;color:#646b65;font-size:11px">Minny &middot; minnyapparel.com</div>
+      <div style="margin-top:10px"><a href="{{UNSUBSCRIBE_URL}}" style="color:#646b65;font-size:11px;text-decoration:underline">Unsubscribe</a></div>
+    </td></tr>
+  </table>
+</div>`;
 
 async function sendEmail(to: string, subject: string, html: string, unsub: string) {
   const key = Deno.env.get('RESEND_API_KEY');
@@ -124,65 +218,88 @@ async function sendEmail(to: string, subject: string, html: string, unsub: strin
   }
 }
 
+// ---------------------------------------------------------------------------
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
   try {
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-    );
-    const { email, source } = await req.json();
-    const signupSource = source === 'exit_popup' ? 'exit_popup' : 'newsletter';
+    const sb = createClient(Deno.env.get('SUPABASE_URL') ?? '', Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '');
+    const body = await req.json().catch(() => ({}));
+    const email = String(body?.email ?? '').trim().toLowerCase();
+    const signupSource = body?.source === 'exit_popup' ? 'exit_popup' : 'newsletter';
+    // Names are shown in the email and used in the code: keep them short and free of markup.
+    const firstName = String(body?.first_name ?? '').replace(/[<>{}]/g, '').replace(/\s+/g, ' ').trim().slice(0, 40);
 
-    if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      return new Response(JSON.stringify({ error: 'Invalid email format' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
+    if (!email || email.length > 254 || !/^\S+@\S+\.\S+$/.test(email)) return json({ error: 'Invalid email format' }, 400);
 
-    const { data, error } = await supabaseClient
+    const inserted = await sb
       .from('subscribers')
-      .insert([{ email, source: signupSource }])
-      .select();
+      .insert([{ email, source: signupSource, ...(firstName ? { first_name: firstName } : {}) }])
+      .select('id, first_name, discount_code')
+      .maybeSingle();
 
-    const alreadySubscribed = error?.code === '23505';
-    if (error && !alreadySubscribed) {
-      console.error('Error saving subscriber:', error);
-      return new Response(JSON.stringify({ error: 'Failed to save subscription' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+    const alreadySubscribed = inserted.error?.code === '23505';
+    if (inserted.error && !alreadySubscribed) {
+      console.error('Error saving subscriber:', inserted.error);
+      return json({ error: 'Failed to save subscription' }, 500);
     }
 
-    // An existing subscriber who asks for the exit offer should still receive it.
-    if (!alreadySubscribed || signupSource === 'exit_popup') {
-      const secret = Deno.env.get('ADMIN_API_KEY') ?? '';
-      const link = unsubUrl(email, await unsubToken(email, secret));
+    let row = inserted.data as { id: string; first_name: string | null; discount_code: string | null } | null;
+    if (alreadySubscribed) {
+      const existing = await sb.from('subscribers').select('id, first_name, discount_code').eq('email', email).limit(1).maybeSingle();
+      row = existing.data as typeof row;
+      if (row && firstName && !row.first_name) {
+        await sb.from('subscribers').update({ first_name: firstName }).eq('id', row.id);
+        row.first_name = firstName;
+      }
+    }
+
+    // One code per person: reuse theirs if they already have one.
+    let code = row?.discount_code ?? null;
+    let createdNow = false;
+    if (!code) {
+      const stripeKey = Deno.env.get('STRIPE_SECRET_KEY');
+      const made = stripeKey ? await createPersonalCode(stripeKey, firstName || row?.first_name || '', email) : null;
+      if (made) {
+        code = made;
+        createdNow = true;
+        if (row) {
+          const saved = await sb.from('subscribers').update({ discount_code: made }).eq('id', row.id);
+          if (saved.error) console.error('Could not save the discount code:', saved.error.message);
+        }
+      }
+    }
+
+    // New subscribers always get the email. Someone already on the list gets it when they had no code yet,
+    // or when they ask through the exit popup (which promises a code).
+    if (!alreadySubscribed || createdNow || signupSource === 'exit_popup') {
+      const unsub = unsubUrl(email, await unsubToken(email, Deno.env.get('ADMIN_API_KEY') ?? ''));
+      const vars: Vars = { code: code ?? FALLBACK_CODE, firstName: firstName || row?.first_name || '', email, unsub };
+
       const templateKey = signupSource === 'exit_popup' ? 'exit_popup' : 'welcome';
-      const template = await getTemplate(supabaseClient, templateKey);
-      const subject = template?.subject || (signupSource === 'exit_popup'
-        ? `Your 10% off code: ${CODE}`
-        : 'Welcome to Minny ✨');
-      const html = template?.html
-        ? String(template.html).split('{{UNSUBSCRIBE_URL}}').join(link)
-        : signupSource === 'exit_popup' ? exitOfferHtml(link) : welcomeHtml(link);
-      await sendEmail(email, subject, html, link);
+      let template: { subject: string | null; html: string | null } | null = null;
+      try {
+        const { data } = await sb.from('email_templates').select('subject, html').eq('key', templateKey).maybeSingle();
+        template = data as typeof template;
+      } catch (_error) {
+        template = null;
+      }
+      // A dashboard template is only used if it actually shows the code.
+      const custom = template?.html && template.html.includes('{{DISCOUNT_CODE}}') ? template : null;
+
+      const subject = fillTags(custom?.subject || DEFAULT_SUBJECT, vars, false);
+      const html = fillTags(custom?.html || DEFAULT_HTML, vars, true);
+      await sendEmail(email, subject, html, unsub);
     }
 
-    return new Response(JSON.stringify({
-      message: alreadySubscribed ? 'You are already subscribed!' : 'Successfully subscribed!',
-      data,
-    }), {
-      status: 200,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    return json({
+      message: alreadySubscribed ? 'You are already subscribed! Check your email for your code.' : 'Successfully subscribed! Your code is on its way.',
+      // Shown on screen only to a brand-new subscriber. For an address already on the list the code goes to the inbox only,
+      // so typing someone else's email can't reveal their code.
+      ...(createdNow && code && !alreadySubscribed ? { code } : {}),
     });
   } catch (error) {
     console.error('Unexpected error:', error);
-    return new Response(JSON.stringify({ error: 'Internal server error' }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    return json({ error: 'Internal server error' }, 500);
   }
 });

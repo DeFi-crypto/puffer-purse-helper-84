@@ -4,11 +4,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { useCheckout } from '@/hooks/use-checkout';
 
 const KEY = 'minny_exit_popup_seen';
-const CODE = 'MINNY10';
 
 const ExitIntent = () => {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  // The subscriber's own one-time code, when the server made one just now.
+  const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [err, setErr] = useState('');
@@ -44,10 +46,11 @@ const ExitIntent = () => {
     setBusy(true);
     setErr('');
     try {
-      const { error } = await supabase.functions.invoke('subscribe', {
-        body: { email, source: 'exit_popup' },
+      const { data, error } = await supabase.functions.invoke('subscribe', {
+        body: { email, first_name: firstName, source: 'exit_popup' },
       });
       if (error) throw new Error(error.message);
+      if (typeof data?.code === 'string') setCode(data.code);
       setDone(true);
     } catch (ex) {
       setErr((ex as Error).message || 'Something went wrong — try again.');
@@ -57,7 +60,7 @@ const ExitIntent = () => {
   };
 
   const copy = () => {
-    navigator.clipboard?.writeText(CODE).then(() => {
+    navigator.clipboard?.writeText(code).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     });
@@ -88,9 +91,21 @@ const ExitIntent = () => {
               Take <span className="text-primary">10% off</span> your Minny.
             </h3>
             <p className="text-white/70 text-sm sm:text-base mb-5">
-              Drop your email and we'll send you a code for 10% off your pre-order.
+              Tell us your name and email and we'll send you your own code for 10% off your pre-order.
             </p>
             <form onSubmit={submit} className="relative">
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="First name"
+                aria-label="First name"
+                autoComplete="given-name"
+                maxLength={40}
+                className="mb-2 w-full h-12 rounded-md bg-black/60 border border-white/10 focus:border-primary outline-none px-4 text-white placeholder:text-white/40"
+                disabled={busy}
+              />
+              <div className="relative">
               <input
                 type="email"
                 required
@@ -108,6 +123,7 @@ const ExitIntent = () => {
               >
                 {busy ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
               </button>
+              </div>
             </form>
             {err && <div className="mt-3 text-sm text-red-400">{err}</div>}
             <div className="mt-4 text-xs text-white/40">Limited-time offer. Unsubscribe any time.</div>
@@ -115,17 +131,23 @@ const ExitIntent = () => {
         ) : (
           <>
             <div className="tag inline-block mb-3">You're in</div>
-            <h3 className="font-display text-2xl sm:text-3xl text-white mb-2">Here's your code.</h3>
+            <h3 className="font-display text-2xl sm:text-3xl text-white mb-2">
+              {code ? "Here's your code." : 'Check your inbox.'}
+            </h3>
             <p className="text-white/70 text-sm sm:text-base mb-5">
-              We've emailed it to you too. Enter it at checkout for 10% off.
+              {code
+                ? "It's yours alone and works once. We've emailed it to you too. Enter it at checkout for 10% off."
+                : "We've emailed your personal 10% off code. Enter it at checkout."}
             </p>
-            <button
-              onClick={copy}
-              className="mx-auto flex items-center gap-3 rounded-xl border border-primary/50 bg-primary/10 px-5 py-3 font-mono text-xl tracking-widest text-primary hover:bg-primary/20"
-            >
-              {CODE}
-              {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-            </button>
+            {code ? (
+              <button
+                onClick={copy}
+                className="mx-auto flex items-center gap-3 rounded-xl border border-primary/50 bg-primary/10 px-5 py-3 font-mono text-xl tracking-widest text-primary hover:bg-primary/20"
+              >
+                {code}
+                {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+              </button>
+            ) : null}
             <button
               type="button"
               onClick={() => {
@@ -135,7 +157,7 @@ const ExitIntent = () => {
               disabled={isCheckingOut}
               className="mt-5 inline-flex items-center justify-center rounded-full bg-primary text-black font-semibold px-7 h-12 hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {isCheckingOut ? 'Opening checkout…' : 'Use it at checkout'}
+              {isCheckingOut ? 'Opening checkout…' : code ? 'Use it at checkout' : 'Go to checkout'}
             </button>
           </>
         )}

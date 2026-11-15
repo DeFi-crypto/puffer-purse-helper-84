@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 const Newsletter = () => {
   const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -19,7 +20,7 @@ const Newsletter = () => {
     }
     try {
       setIsSubmitting(true);
-      const { data, error } = await supabase.functions.invoke('subscribe', { body: { email } });
+      const { data, error } = await supabase.functions.invoke('subscribe', { body: { email, first_name: firstName } });
       if (error) throw new Error(error.message || 'Failed to subscribe');
       setEmail('');
       setIsSubscribed(true);
@@ -42,11 +43,22 @@ const Newsletter = () => {
             <div className="tag mb-3 inline-block">Stay Updated</div>
             <h2 className="font-display text-3xl sm:text-4xl mb-3 text-foreground">Be The First To Know</h2>
             <p className="text-muted-foreground max-w-xl mx-auto mb-5 text-sm sm:text-base">
-              Drops, behind-the-scenes, and first access before anyone else. No spam.
+              Drops, behind-the-scenes, and first access before anyone else. Plus your own code for 10% off. No spam.
             </p>
 
             {!isSubscribed ? (
               <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+                <Input
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="First name"
+                  aria-label="First name"
+                  autoComplete="given-name"
+                  maxLength={40}
+                  className="mb-2 h-12 bg-black/60 border-white/10 focus:border-primary transition-all duration-300 text-foreground"
+                  disabled={isSubmitting}
+                />
                 <div className="relative">
                   <Input
                     type="email"
@@ -70,7 +82,7 @@ const Newsletter = () => {
             ) : (
               <div className="flex items-center justify-center space-x-2 text-primary">
                 <Send className="h-5 w-5" />
-                <span>Thank you for subscribing!</span>
+                <span>Thank you for subscribing! Your 10% off code is in your inbox.</span>
               </div>
             )}
 

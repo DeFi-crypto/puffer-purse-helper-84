@@ -49,6 +49,8 @@ function shape(p: any) {
     percentOff: p.coupon?.percent_off ?? null,
     amountOffCents: p.coupon?.amount_off ?? null,
     timesRedeemed: p.times_redeemed ?? 0,
+    // Made by the subscribe function, one per subscriber (EMILY10). The dashboard only counts these.
+    personal: p.metadata?.source === "welcome",
     maxRedemptions: p.max_redemptions ?? null,
     expiresAt: p.expires_at ?? null,
     created: p.created ?? null,
@@ -74,9 +76,21 @@ serve(async (req) => {
 
   try {
     if (body.action === "list") {
-      const r = await stripe(stripeKey, "GET", "promotion_codes", new URLSearchParams({ limit: "100" }));
-      if (!r.ok) return json({ error: r.data?.error?.message || "Stripe error" }, 502);
-      return json({ coupons: (r.data.data ?? []).map(shape) });
+      // Personal welcome codes can run into the hundreds, so page through instead of taking the newest 100.
+      // deno-lint-ignore no-explicit-any
+      const all: any[] = [];
+      let after = "";
+      for (let page = 0; page < 20; page++) {
+        const params = new URLSearchParams({ limit: "100" });
+        if (after) params.set("starting_after", after);
+        const r = await stripe(stripeKey, "GET", "promotion_codes", params);
+        if (!r.ok) return json({ error: r.data?.error?.message || "Stripe error" }, 502);
+        const batch = r.data.data ?? [];
+        all.push(...batch);
+        if (!r.data.has_more || batch.length === 0) break;
+        after = batch[batch.length - 1].id;
+      }
+      return json({ coupons: all.map(shape) });
     }
 
     if (body.action === "create") {
