@@ -5,7 +5,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.4";
 //
 // Every subscriber gets their own one-time discount code, named after them (EMILY10). It is a real
 // Stripe promotion code limited to one redemption, stored on their subscribers row, and emailed in the
-// welcome email. Asking again (same email) re-sends the same code, never a second one.
+// welcome email. Asking again (same email) re-sends the same code, never a second one. When EMILY10 is
+// taken by another Emily who hasn't used it yet, the next one gets EMILY10OFF, EMILYOFF10 and so on.
 //
 // The email is the live `welcome` / `exit_popup` template from the Mailer dashboard when it contains
 // {{DISCOUNT_CODE}}; otherwise the built-in design below is used, so the code is always delivered.
@@ -86,35 +87,50 @@ function lettersOnly(value: string): string {
   return value.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/[^A-Z]/g, '');
 }
 
-/** The name part of a code: their first name, else the start of their email address, else MINNY. */
-function codeBase(firstName: string, email: string): string {
-  const fromName = lettersOnly(firstName.trim().split(/\s+/)[0] ?? '').slice(0, 12);
-  if (fromName.length >= 2) return fromName;
-  const fromEmail = lettersOnly(email.split('@')[0].split(/[^A-Za-zÀ-ɏ]/)[0] ?? '').slice(0, 12);
-  return fromEmail.length >= 2 ? fromEmail : 'MINNY';
-}
-
-// No 0/O, 1/I/L: these get read out and typed.
-const CODE_CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-function randomChars(n: number): string {
-  const bytes = crypto.getRandomValues(new Uint8Array(n));
-  return [...bytes].map((b) => CODE_CHARS[b % CODE_CHARS.length]).join('');
+/** Letters and digits only, for the part of an email address before the @. */
+function lettersAndDigits(value: string): string {
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 }
 
 /**
- * Creates this subscriber's own code in Stripe: EMILY10 if it's free, otherwise EMILY10-K7 and so on
- * (Stripe codes are unique and not case-sensitive, so the hundredth Emily still gets one that works).
- * Returns null if Stripe can't be reached or refuses for another reason.
+ * The codes to try for this person, in order. No random characters: every one reads as a name.
+ *   EMILY10 -> EMILY10OFF -> EMILYOFF10 -> EMILY10PERCENT -> EMILY10PERCENTOFF -> EMILYTENOFF
+ *   -> EMILYSMITH10 (when we know the last name) -> EMILYJ9210 (their address before the @) -> ...10OFF
+ * Stripe only requires a code to be unique among ACTIVE codes, and a one-time code switches off when it is
+ * used. So once an earlier Emily has spent EMILY10, the next Emily gets EMILY10 again.
  */
-async function createPersonalCode(stripeKey: string, firstName: string, email: string): Promise<string | null> {
-  if (!(await ensureCoupon(stripeKey))) return null;
-  const base = `${codeBase(firstName, email)}${DISCOUNT_PERCENT}`;
-  const candidates = [
-    base,
-    ...Array.from({ length: 4 }, () => `${base}-${randomChars(2)}`),
-    ...Array.from({ length: 3 }, () => `${base}-${randomChars(4)}`),
+function codeCandidates(firstName: string, lastName: string, email: string): string[] {
+  const n = DISCOUNT_PERCENT;
+  const local = lettersAndDigits(email.split('@')[0]).slice(0, 24);
+  const first = lettersOnly(firstName.trim().split(/\s+/)[0] ?? '').slice(0, 14);
+  const last = lettersOnly(lastName.trim()).slice(0, 14);
+  const fromEmail = lettersOnly(email.split('@')[0].split(/[^A-Za-z\u00C0-\u024F]/)[0] ?? '').slice(0, 14);
+  const name = first.length >= 2 ? first : fromEmail.length >= 2 ? fromEmail : 'MINNY';
+
+  const list = [
+    `${name}${n}`,
+    `${name}${n}OFF`,
+    `${name}OFF${n}`,
+    `${name}${n}PERCENT`,
+    `${name}${n}PERCENTOFF`,
+    n === 10 ? `${name}TENOFF` : '',
+    last.length >= 2 && first.length >= 2 ? `${first}${last}${n}` : '',
+    last.length >= 2 && first.length >= 2 ? `${first}${last}${n}OFF` : '',
+    local.length >= 2 ? `${local}${n}` : '',
+    local.length >= 2 ? `${local}${n}OFF` : '',
+    local.length >= 2 ? `${local}OFF${n}` : '',
   ];
-  for (const code of candidates) {
+  return [...new Set(list.filter(Boolean))];
+}
+
+/**
+ * Creates this subscriber's own one-time code in Stripe, using the first name in codeCandidates() that isn't
+ * taken by another active code. Returns null if Stripe can't be reached, refuses for another reason, or every
+ * candidate is taken (the caller then falls back to the shared code).
+ */
+async function createPersonalCode(stripeKey: string, firstName: string, lastName: string, email: string): Promise<string | null> {
+  if (!(await ensureCoupon(stripeKey))) return null;
+  for (const code of codeCandidates(firstName, lastName, email)) {
     const made = await stripe(stripeKey, 'POST', 'promotion_codes', new URLSearchParams({
       coupon: WELCOME_COUPON_ID,
       code,
@@ -130,6 +146,7 @@ async function createPersonalCode(stripeKey: string, firstName: string, email: s
       return null;
     }
   }
+  console.error('Every code name for this subscriber is taken; using the shared code.');
   return null;
 }
 
@@ -235,7 +252,7 @@ serve(async (req) => {
     const inserted = await sb
       .from('subscribers')
       .insert([{ email, source: signupSource, ...(firstName ? { first_name: firstName } : {}) }])
-      .select('id, first_name, discount_code')
+      .select('id, first_name, last_name, discount_code')
       .maybeSingle();
 
     const alreadySubscribed = inserted.error?.code === '23505';
@@ -244,9 +261,9 @@ serve(async (req) => {
       return json({ error: 'Failed to save subscription' }, 500);
     }
 
-    let row = inserted.data as { id: string; first_name: string | null; discount_code: string | null } | null;
+    let row = inserted.data as { id: string; first_name: string | null; last_name: string | null; discount_code: string | null } | null;
     if (alreadySubscribed) {
-      const existing = await sb.from('subscribers').select('id, first_name, discount_code').eq('email', email).limit(1).maybeSingle();
+      const existing = await sb.from('subscribers').select('id, first_name, last_name, discount_code').eq('email', email).limit(1).maybeSingle();
       row = existing.data as typeof row;
       if (row && firstName && !row.first_name) {
         await sb.from('subscribers').update({ first_name: firstName }).eq('id', row.id);
@@ -259,7 +276,7 @@ serve(async (req) => {
     let createdNow = false;
     if (!code) {
       const stripeKey = Deno.env.get('STRIPE_SECRET_KEY');
-      const made = stripeKey ? await createPersonalCode(stripeKey, firstName || row?.first_name || '', email) : null;
+      const made = stripeKey ? await createPersonalCode(stripeKey, firstName || row?.first_name || '', row?.last_name || '', email) : null;
       if (made) {
         code = made;
         createdNow = true;
