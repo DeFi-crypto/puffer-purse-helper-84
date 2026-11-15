@@ -6,7 +6,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.4";
 // Every subscriber gets their own one-time discount code, named after them (EMILY10). It is a real
 // Stripe promotion code limited to one redemption, stored on their subscribers row, and emailed in the
 // welcome email. Asking again (same email) re-sends the same code, never a second one. When EMILY10 is
-// taken by another Emily who hasn't used it yet, the next one gets EMILY10OFF, EMILYOFF10 and so on.
+// taken by another Emily who hasn't used it yet, the next one gets EMILY10OFF, 10OFFEMILY and so on.
 //
 // The email is the live `welcome` / `exit_popup` template from the Mailer dashboard when it contains
 // {{DISCOUNT_CODE}}; otherwise the built-in design below is used, so the code is always delivered.
@@ -93,32 +93,38 @@ function lettersAndDigits(value: string): string {
 }
 
 /**
- * The codes to try for this person, in order. No random characters: every one reads as a name.
- *   EMILY10 -> EMILY10OFF -> EMILYOFF10 -> EMILY10PERCENT -> EMILY10PERCENTOFF -> EMILYTENOFF
- *   -> EMILYSMITH10 (when they typed their full name) -> EMILYJ9210 (their address before the @) -> ...10OFF
+ * The codes to try for this person, in order. No random characters: every one reads as their name.
+ * For Emily Smith <emily.smith172@gmail.com>:
+ *   EMILY10, EMILY10OFF, 10OFFEMILY, EMILYOFF10, 10EMILYOFF, EMILY10PERCENT, EMILY10PERCENTOFF, EMILYTENOFF,
+ *   then the same shapes with the full name (EMILYSMITH10, 10OFFEMILYSMITH ...), taken from what they typed
+ *   or from the letters of their email address (digits dropped: emily.smith172 -> EMILYSMITH),
+ *   and only as a last resort the email name with its digits (EMILYSMITH17210).
  * Stripe only requires a code to be unique among ACTIVE codes, and a one-time code switches off when it is
  * used. So once an earlier Emily has spent EMILY10, the next Emily gets EMILY10 again.
  */
 function codeCandidates(firstName: string, lastName: string, email: string): string[] {
   const n = DISCOUNT_PERCENT;
-  const local = lettersAndDigits(email.split('@')[0]).slice(0, 24);
+  const localPart = email.split('@')[0];
+  const emailLetters = lettersOnly(localPart).slice(0, 20);
+  const emailWithDigits = lettersAndDigits(localPart).slice(0, 24);
+  const emailFirstWord = lettersOnly(localPart.split(/[^A-Za-zÀ-ɏ]/)[0] ?? '').slice(0, 14);
+
   const first = lettersOnly(firstName.trim().split(/\s+/)[0] ?? '').slice(0, 14);
   const last = lettersOnly(lastName.trim()).slice(0, 14);
-  const fromEmail = lettersOnly(email.split('@')[0].split(/[^A-Za-z\u00C0-\u024F]/)[0] ?? '').slice(0, 14);
-  const name = first.length >= 2 ? first : fromEmail.length >= 2 ? fromEmail : 'MINNY';
+  const name = first.length >= 2 ? first : emailFirstWord.length >= 2 ? emailFirstWord : 'MINNY';
+  const fullName = first.length >= 2 && last.length >= 2 ? `${first}${last}` : '';
+
+  // The shapes a code can take around a name.
+  const shapes = (x: string) => [`${x}${n}`, `${x}${n}OFF`, `${n}OFF${x}`, `${x}OFF${n}`, `${n}${x}OFF`];
 
   const list = [
-    `${name}${n}`,
-    `${name}${n}OFF`,
-    `${name}OFF${n}`,
+    ...shapes(name),
     `${name}${n}PERCENT`,
     `${name}${n}PERCENTOFF`,
     n === 10 ? `${name}TENOFF` : '',
-    last.length >= 2 && first.length >= 2 ? `${first}${last}${n}` : '',
-    last.length >= 2 && first.length >= 2 ? `${first}${last}${n}OFF` : '',
-    local.length >= 2 ? `${local}${n}` : '',
-    local.length >= 2 ? `${local}${n}OFF` : '',
-    local.length >= 2 ? `${local}OFF${n}` : '',
+    ...(fullName ? shapes(fullName) : []),
+    ...(emailLetters.length >= 2 ? shapes(emailLetters) : []),
+    ...(emailWithDigits.length >= 2 ? shapes(emailWithDigits) : []),
   ];
   return [...new Set(list.filter(Boolean))];
 }
