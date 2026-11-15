@@ -95,7 +95,7 @@ function lettersAndDigits(value: string): string {
 /**
  * The codes to try for this person, in order. No random characters: every one reads as a name.
  *   EMILY10 -> EMILY10OFF -> EMILYOFF10 -> EMILY10PERCENT -> EMILY10PERCENTOFF -> EMILYTENOFF
- *   -> EMILYSMITH10 (when we know the last name) -> EMILYJ9210 (their address before the @) -> ...10OFF
+ *   -> EMILYSMITH10 (when they typed their full name) -> EMILYJ9210 (their address before the @) -> ...10OFF
  * Stripe only requires a code to be unique among ACTIVE codes, and a one-time code switches off when it is
  * used. So once an earlier Emily has spent EMILY10, the next Emily gets EMILY10 again.
  */
@@ -245,13 +245,16 @@ serve(async (req) => {
     const email = String(body?.email ?? '').trim().toLowerCase();
     const signupSource = body?.source === 'exit_popup' ? 'exit_popup' : 'newsletter';
     // Names are shown in the email and used in the code: keep them short and free of markup.
-    const firstName = String(body?.first_name ?? '').replace(/[<>{}]/g, '').replace(/\s+/g, ' ').trim().slice(0, 40);
+    const typedName = String(body?.first_name ?? '').replace(/[<>{}]/g, '').replace(/\s+/g, ' ').trim().slice(0, 60);
+    // People often type their full name in the one name box: "Emily Smith" -> first "Emily", last "Smith".
+    const firstName = typedName.split(' ')[0] ?? '';
+    const typedLast = typedName.split(' ').slice(1).join(' ');
 
     if (!email || email.length > 254 || !/^\S+@\S+\.\S+$/.test(email)) return json({ error: 'Invalid email format' }, 400);
 
     const inserted = await sb
       .from('subscribers')
-      .insert([{ email, source: signupSource, ...(firstName ? { first_name: firstName } : {}) }])
+      .insert([{ email, source: signupSource, ...(firstName ? { first_name: firstName } : {}), ...(typedLast ? { last_name: typedLast } : {}) }])
       .select('id, first_name, last_name, discount_code')
       .maybeSingle();
 
@@ -266,8 +269,9 @@ serve(async (req) => {
       const existing = await sb.from('subscribers').select('id, first_name, last_name, discount_code').eq('email', email).limit(1).maybeSingle();
       row = existing.data as typeof row;
       if (row && firstName && !row.first_name) {
-        await sb.from('subscribers').update({ first_name: firstName }).eq('id', row.id);
+        await sb.from('subscribers').update({ first_name: firstName, ...(typedLast && !row.last_name ? { last_name: typedLast } : {}) }).eq('id', row.id);
         row.first_name = firstName;
+        if (typedLast && !row.last_name) row.last_name = typedLast;
       }
     }
 
@@ -276,7 +280,7 @@ serve(async (req) => {
     let createdNow = false;
     if (!code) {
       const stripeKey = Deno.env.get('STRIPE_SECRET_KEY');
-      const made = stripeKey ? await createPersonalCode(stripeKey, firstName || row?.first_name || '', row?.last_name || '', email) : null;
+      const made = stripeKey ? await createPersonalCode(stripeKey, firstName || row?.first_name || '', typedLast || row?.last_name || '', email) : null;
       if (made) {
         code = made;
         createdNow = true;
