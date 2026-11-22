@@ -3,9 +3,33 @@ import { supabase } from '@/integrations/supabase/client';
 
 // The pre-order price is set in the Mailer dashboard (Settings → Store) and stored in the
 // store_settings table. The checkout function charges the same number. DEFAULT_PRICE_CENTS is
-// only what's shown for the instant before the live price loads, or if it can't be read.
-export const DEFAULT_PRICE_CENTS = 17999;
+// only the last resort, used if the price can't be read at build time or in the browser.
+//
+// The build reads the live price and bakes it into every page's HTML (scripts/prerender-plugin.ts),
+// so crawlers and AI agents, which read the HTML without waiting for scripts, see the real price
+// and visitors don't see it change after the page loads.
+export const DEFAULT_PRICE_CENTS = 13999;
 const CACHE_KEY = 'minny_price_cents';
+
+declare global {
+  interface Window {
+    __MINNY_PRICE_CENTS__?: number;
+  }
+}
+
+let serverPriceCents: number | null = null;
+
+/** Build-time only: the price the prerender renders into the static HTML. */
+export function setServerPriceCents(cents: number): void {
+  if (valid(cents)) serverPriceCents = cents;
+}
+
+/** The price already in the page's HTML. The first render must match it exactly. */
+function initial(): number {
+  if (typeof window === 'undefined') return serverPriceCents ?? DEFAULT_PRICE_CENTS;
+  const baked = window.__MINNY_PRICE_CENTS__;
+  return valid(baked) ? baked : cached();
+}
 
 function valid(cents: unknown): cents is number {
   return typeof cents === 'number' && Number.isInteger(cents) && cents >= 100 && cents <= 1000000;
@@ -52,9 +76,9 @@ export function formatPrice(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
 }
 
-/** The current pre-order price, formatted like "$179.99". */
+/** The current pre-order price, formatted like "$139.99". */
 export function usePrice(): string {
-  const [cents, setCents] = useState<number>(cached);
+  const [cents, setCents] = useState<number>(initial);
 
   useEffect(() => {
     let alive = true;

@@ -79,7 +79,10 @@ export const prerender = (): Plugin => {
           const json = JSON.stringify(data).replace(/</g, '\\u003c');
           html = html.replace('</head>', `  <script type="application/ld+json">${json}</script>\n  </head>`);
         }
-        return setTag(html, /<div id="root"><\/div>/, `<div id="root">${server.render(routePath)}</div>`);
+        // The page HTML carries the live price and the app starts from the same number, so the
+        // price never changes after load and agents that don't run scripts read the right one.
+        html = html.replace('</head>', `  <script>window.__MINNY_PRICE_CENTS__=${priceCents}</script>\n  </head>`);
+        return setTag(html, /<div id="root"><\/div>/, `<div id="root">${server.render(routePath, priceCents)}</div>`);
       };
 
       for (const meta of pages) {
@@ -102,6 +105,12 @@ export const prerender = (): Plugin => {
         path.join(outDir, 'sitemap.xml'),
         `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
       );
+
+      // llms.txt is what AI agents read first: give it the same live price.
+      const llmsPath = path.join(outDir, 'llms.txt');
+      const llms = fs.readFileSync(llmsPath, 'utf8');
+      if (!llms.includes('{{PRICE}}')) throw new Error('prerender: {{PRICE}} not found in public/llms.txt');
+      fs.writeFileSync(llmsPath, llms.replaceAll('{{PRICE}}', `$${(priceCents / 100).toFixed(2)}`));
 
       fs.rmSync(serverDir, { recursive: true, force: true });
       console.log(`prerendered ${pages.length} pages + 404.html + sitemap.xml (price ${priceCents}¢)`);
