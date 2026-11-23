@@ -8,7 +8,6 @@ const KEY = 'minny_exit_popup_seen';
 const ExitIntent = () => {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
   // The subscriber's own one-time code, when the server made one just now.
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
@@ -47,7 +46,7 @@ const ExitIntent = () => {
     setErr('');
     try {
       const { data, error } = await supabase.functions.invoke('subscribe', {
-        body: { email, first_name: firstName, source: 'exit_popup' },
+        body: { email, source: 'exit_popup' },
       });
       if (error) throw new Error(error.message);
       if (typeof data?.code === 'string') setCode(data.code);
@@ -91,28 +90,19 @@ const ExitIntent = () => {
               Take <span className="text-primary">10% off</span> your Minny.
             </h3>
             <p className="text-white/70 text-sm sm:text-base mb-5">
-              Tell us your name and email and we'll send you your own code for 10% off your pre-order.
+              Drop your email and we'll send you your own code for 10% off your pre-order.
             </p>
             <form onSubmit={submit} className="relative">
-              <input
-                type="text"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                placeholder="First name"
-                aria-label="First name"
-                autoComplete="given-name"
-                maxLength={40}
-                className="mb-2 w-full h-12 rounded-md bg-black/60 border border-white/10 focus:border-primary outline-none px-4 text-white placeholder:text-white/40"
-                disabled={busy}
-              />
               <div className="relative">
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="w-full h-12 rounded-md bg-black/60 border border-white/10 focus:border-primary outline-none px-4 pr-14 text-white placeholder:text-white/40"
+                placeholder="Email for 10% off"
+                aria-label="Email address"
+                autoComplete="email"
+                className="w-full h-12 rounded-md bg-black/60 border-2 border-primary/70 focus:border-primary outline-none px-4 pr-14 text-white placeholder:text-white/40"
                 disabled={busy}
               />
               <button
