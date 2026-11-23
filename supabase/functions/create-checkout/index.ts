@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 // Fallback only. The live price is the store_settings row, edited in the Mailer (Settings → Store).
-const DEFAULT_PRICE_CENTS = 17999; // $179.99
+const DEFAULT_PRICE_CENTS = 13999; // $139.99
 
 /** The price set in the Mailer, or the fallback if it can't be read. Checkout must never fail on this. */
 async function currentPriceCents(): Promise<number> {

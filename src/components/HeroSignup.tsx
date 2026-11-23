@@ -5,7 +5,6 @@ import { supabase } from '@/integrations/supabase/client';
 /** Compact newsletter signup for the hero; posts to the same `subscribe` function as the Newsletter section. */
 const HeroSignup = () => {
   const [email, setEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [err, setErr] = useState('');
@@ -17,7 +16,7 @@ const HeroSignup = () => {
     setErr('');
     try {
       const { error } = await supabase.functions.invoke('subscribe', {
-        body: { email, first_name: firstName, source: 'newsletter' },
+        body: { email, source: 'newsletter' },
       });
       if (error) throw new Error(error.message);
       setDone(true);
@@ -42,18 +41,7 @@ const HeroSignup = () => {
   return (
     <form onSubmit={submit} className="mt-3 w-full max-w-md">
       <label htmlFor="hero-email" className="sr-only">Email address</label>
-      <div className="flex items-center rounded-full bg-black/60 backdrop-blur border border-white/15 focus-within:border-primary p-1 transition-colors">
-        <input
-          type="text"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          placeholder="First name"
-          aria-label="First name"
-          autoComplete="given-name"
-          maxLength={40}
-          disabled={busy}
-          className="w-[6.25rem] sm:w-32 shrink-0 bg-transparent pl-4 pr-2 h-10 sm:h-11 text-base text-white placeholder:text-white/50 outline-none border-r border-white/15"
-        />
+      <div className="flex items-center rounded-full bg-black/60 backdrop-blur border-2 border-primary/70 focus-within:border-primary p-1 transition-colors">
         <input
           id="hero-email"
           type="email"
@@ -61,8 +49,9 @@ const HeroSignup = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email for 10% off"
+          autoComplete="email"
           disabled={busy}
-          className="min-w-0 flex-1 bg-transparent px-3 h-10 sm:h-11 text-base text-white placeholder:text-white/50 outline-none"
+          className="min-w-0 flex-1 bg-transparent pl-4 pr-3 h-10 sm:h-11 text-base text-white placeholder:text-white/50 outline-none"
         />
         <button
           type="submit"

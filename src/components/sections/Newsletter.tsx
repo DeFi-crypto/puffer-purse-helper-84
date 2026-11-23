@@ -8,7 +8,6 @@ import { supabase } from '@/integrations/supabase/client';
 
 const Newsletter = () => {
   const [email, setEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -20,7 +19,7 @@ const Newsletter = () => {
     }
     try {
       setIsSubmitting(true);
-      const { data, error } = await supabase.functions.invoke('subscribe', { body: { email, first_name: firstName } });
+      const { data, error } = await supabase.functions.invoke('subscribe', { body: { email } });
       if (error) throw new Error(error.message || 'Failed to subscribe');
       setEmail('');
       setIsSubscribed(true);
@@ -48,25 +47,16 @@ const Newsletter = () => {
 
             {!isSubscribed ? (
               <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-                <Input
-                  type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  placeholder="First name"
-                  aria-label="First name"
-                  autoComplete="given-name"
-                  maxLength={40}
-                  className="mb-2 h-12 bg-black/60 border-white/10 focus:border-primary transition-all duration-300 text-foreground"
-                  disabled={isSubmitting}
-                />
                 <div className="relative">
                   <Input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
+                    placeholder="Email for 10% off"
+                    aria-label="Email address"
+                    autoComplete="email"
                     required
-                    className="pr-14 h-12 bg-black/60 border-white/10 focus:border-primary transition-all duration-300 text-foreground"
+                    className="pr-14 h-12 bg-black/60 border-2 border-primary/70 focus:border-primary transition-all duration-300 text-foreground"
                     disabled={isSubmitting}
                   />
                   <Button

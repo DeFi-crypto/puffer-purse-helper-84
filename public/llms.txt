@@ -6,6 +6,7 @@
 - Company name: Minny Apparel. Product name: Minny.
 - Founder and CEO: Veeraj Chimanpure (https://minnyapparel.com/founder)
 - Product: convertible purse-to-puffer jacket for nights out in cold weather, so there is no coat to check or carry.
+- Price: {{PRICE}} USD, the current pre-order price, paid once at checkout.
 - Status: available for pre-order from the first production run. Ships within the United States.
 - Contact: contact@minnyapparel.com
 
