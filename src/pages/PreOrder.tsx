@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Check, Loader2, ShieldCheck, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCheckout } from '@/hooks/use-checkout';
-import { usePrice } from '@/hooks/use-price';
+import { usePrice, useSale } from '@/hooks/use-price';
 
 const perks = [
   'A real down-and-feather puffer that folds into a purse in 30 seconds',
@@ -15,6 +15,7 @@ const perks = [
 const PreOrder = () => {
   const { isCheckingOut, startCheckout } = useCheckout();
   const PRICE = usePrice();
+  const sale = useSale();
 
   useEffect(() => {
     document.title = `Pre-Order Minny — ${PRICE}`;
@@ -43,8 +44,14 @@ const PreOrder = () => {
               production run — we'll email you when it ships.
             </p>
 
-            <div className="flex items-baseline gap-2 mb-4 sm:mb-5">
+            <div className="flex flex-wrap items-baseline gap-2 mb-4 sm:mb-5">
+              {sale && <span className="text-xl sm:text-2xl text-muted-foreground line-through">{sale.compareAt}</span>}
               <span className="text-3xl sm:text-4xl font-bold text-foreground">{PRICE}</span>
+              {sale && (
+                <span className="self-center rounded-full bg-red-500 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-white">
+                  {sale.percentOff}% off{sale.label ? ` · ${sale.label}` : ''}
+                </span>
+              )}
               <span className="text-sm sm:text-base text-muted-foreground">one-time · pre-order price</span>
             </div>
 

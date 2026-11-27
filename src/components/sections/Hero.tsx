@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import { useCheckout } from '@/hooks/use-checkout';
-import { usePrice } from '@/hooks/use-price';
+import { usePrice, useSale } from '@/hooks/use-price';
 import HeroSignup from '@/components/HeroSignup';
 
 const STEPS = ['Unclip', 'Unfold', 'Zip up'];
@@ -31,6 +31,7 @@ const Hero = () => {
   );
   const { isCheckingOut, startCheckout } = useCheckout();
   const price = usePrice();
+  const sale = useSale();
 
   useEffect(() => {
     const mql = window.matchMedia(DESKTOP_QUERY);
@@ -193,6 +194,17 @@ const Hero = () => {
                   </li>
                 ))}
               </ul>
+
+              {sale && (
+                <div className="mb-2.5 sm:mb-3 flex flex-wrap items-center gap-2 text-[13px] sm:text-sm">
+                  <span className="rounded-full bg-red-500 px-2.5 py-0.5 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-white shadow-[0_0_16px_rgba(239,68,68,0.45)]">
+                    {sale.percentOff}% off
+                  </span>
+                  <span className="text-white/50 line-through">{sale.compareAt}</span>
+                  <span className="font-semibold text-white">{price}</span>
+                  {sale.label && <span className="text-white/70">· {sale.label}</span>}
+                </div>
+              )}
 
               <div className="flex flex-row flex-wrap gap-2 sm:gap-3">
                 <button

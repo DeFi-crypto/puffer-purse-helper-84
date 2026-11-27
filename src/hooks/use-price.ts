@@ -44,6 +44,22 @@ function cached(): number {
   }
 }
 
+/** A sale set in the Mailer (Settings → Store → Sale): the regular price is shown crossed out with a % OFF badge. */
+export type Sale = { compareAt: string; percentOff: number; label: string };
+
+// Filled by the same request that reads the price. Never part of the prerendered HTML: the badge appears
+// once the live row has been read, so the first render always matches the page as built.
+let liveSale: Sale | null = null;
+
+function readSale(row: { price_cents?: unknown; compare_at_cents?: unknown; sale_label?: unknown } | null): Sale | null {
+  const price = row?.price_cents;
+  const compareAt = row?.compare_at_cents;
+  if (!valid(price) || !valid(compareAt) || compareAt <= price) return null;
+  const percentOff = Math.round((1 - price / compareAt) * 100);
+  if (percentOff < 1) return null;
+  return { compareAt: formatPrice(compareAt), percentOff, label: typeof row?.sale_label === 'string' ? row.sale_label.trim() : '' };
+}
+
 let inflight: Promise<number | null> | null = null;
 
 function fetchPrice(): Promise<number | null> {
@@ -53,11 +69,12 @@ function fetchPrice(): Promise<number | null> {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { data, error } = await (supabase as any)
           .from('store_settings')
-          .select('price_cents')
+          .select('*') // price_cents, plus compare_at_cents and sale_label when a sale is running
           .eq('id', 1)
           .maybeSingle();
         const cents = data?.price_cents;
         if (error || !valid(cents)) return null;
+        liveSale = readSale(data);
         try {
           sessionStorage.setItem(CACHE_KEY, String(cents));
         } catch {
@@ -91,4 +108,21 @@ export function usePrice(): string {
   }, []);
 
   return formatPrice(cents);
+}
+
+/** The running sale, or null. Null on the first render and whenever no sale is set. */
+export function useSale(): Sale | null {
+  const [sale, setSale] = useState<Sale | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    fetchPrice().then(() => {
+      if (alive) setSale(liveSale);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  return sale;
 }
